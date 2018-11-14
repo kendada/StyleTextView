@@ -12,7 +12,9 @@
 
 ##### 需要在Application中初始化，AppStyleUtils.init(this)，这里主要是用来获取Resources对象，不然无法使用；
 
-``public class MainActivity extends AppCompatActivity {
+``   
+Demo代码如下：
+public class MainActivity extends AppCompatActivity {
 
 
     private FlexibleRichTextView mFlexibleRichTextView;
@@ -108,6 +110,7 @@
     }
 
 }
+
 ``
 
 ![Alt text](https://github.com/kendada/StyleTextView/blob/master/app/src/main/res/drawable/style_text_view_image.png)
