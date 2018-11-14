@@ -8,3 +8,5 @@
 + WebUrlPovideStyleData 网址高亮，添加点击
 + MentionUserPovideStyleData @某用户
 + TownTalkPovideStyleData 话题，内置样式和微博不同，详见代码，可自行更改
+
+![Alt text](https://github.com/kendada/StyleTextView/blob/master/app/src/main/res/drawable/style_text_view_image.png)
