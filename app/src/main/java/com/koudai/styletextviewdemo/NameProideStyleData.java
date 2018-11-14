@@ -52,6 +52,16 @@ public class NameProideStyleData extends DefaultPovideStyleDataImp {
     }
 
     @Override
+    public boolean isMatchOne() {
+        return true;
+    }
+
+    @Override
+    public int getMatchWhichOne() {
+        return 1;
+    }
+
+    @Override
     public int getRichTextStyle() {
         return 100;
     }

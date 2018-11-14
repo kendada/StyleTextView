@@ -118,19 +118,29 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
          * 匹配单个key
          * */
         private void matchSingleKey(){
-            if (TextUtils.isEmpty(mIPovideStyleData.getNeedHighlightText())) return;
-            final TextStylePhrase.TextSize textSize = mTextStylePhrase.getTextSize(mIPovideStyleData.getNeedHighlightText());
-            mTextStylePhrase.setForegroundColorSpan(mIPovideStyleData.getHighlightColorId(), textSize);
-            mTextStylePhrase.setStyleSpan(mIPovideStyleData.getTypeface(), textSize);
-            if (mIPovideStyleData.getHighlightTextSize() > 0){
-                mTextStylePhrase.setAbsoluteSizeSpan(mIPovideStyleData.getHighlightTextSize(), textSize);
-            }
-            mTextStylePhrase.setClickableSpan(textSize, new NoUnderlineClickableSpan() {
-                @Override
-                public void onClick(@NonNull View widget) {
-                    RichTextView.this.onClick(getRichTextStyle(), textSize.getText());
+            String mNeedHighlightText = mIPovideStyleData.getNeedHighlightText();
+            if (TextUtils.isEmpty(mNeedHighlightText)) return;
+
+            List<TextStylePhrase.TextSize> textSizeList = new ArrayList<>();
+
+            List<TextStylePhrase.TextSize> list = mTextStylePhrase.searchAllTextSize(mNeedHighlightText);
+
+            if (mIPovideStyleData.isMatchOne()){
+                textSizeList.clear();
+                int mMatchWhichOne = mIPovideStyleData.getMatchWhichOne();
+                if(list != null && list.size() > 0) {
+                    if (mMatchWhichOne < list.size()){
+                        textSizeList.add(list.get(mMatchWhichOne));
+                    } else {
+                        textSizeList.add(list.get(0));
+                    }
                 }
-            });
+            } else {
+                textSizeList.clear();
+                textSizeList.addAll(list);
+            }
+
+            setRichStyle(textSizeList);
         }
 
         /**

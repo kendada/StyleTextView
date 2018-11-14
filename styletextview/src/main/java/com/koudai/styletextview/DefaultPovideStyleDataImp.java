@@ -44,6 +44,16 @@ public abstract class DefaultPovideStyleDataImp implements IPovideStyleData{
     }
 
     @Override
+    public boolean isMatchOne() {
+        return false;
+    }
+
+    @Override
+    public int getMatchWhichOne() {
+        return 0;
+    }
+
+    @Override
     public int getRichTextStyle() {
         return -1;
     }

@@ -20,6 +20,10 @@ public interface IPovideStyleData {
 
     String getNeedHighlightText(); // 如果不使用正则表达式匹配，则使用这个字符串
 
+    boolean isMatchOne(); // 是否只匹配一个，默认第一个
+
+    int getMatchWhichOne(); // 匹配哪一个，在isMatchOne为true的情况下，默认第一个
+
     int getRichTextStyle(); // 供前台回调使用，具体区分使用的哪种
 
 }
