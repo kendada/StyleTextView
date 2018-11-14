@@ -47,19 +47,24 @@ public class MainActivity extends AppCompatActivity {
     protected void testStylePhrase() {
         TextStylePhrase mTextStylePhrase = new TextStylePhrase(sourceText);
 
-        TextStylePhrase.TargetPhraseText phraseText1 = new TextStylePhrase.TargetPhraseText("水寒",
-                R.color.colorPrimaryDark, 25, -1);
+        TextStylePhrase.TextSize phraseText1 =  mTextStylePhrase.getTextSize("水寒");
+        mTextStylePhrase.setForegroundColorSpan(R.color.colorPrimaryDark, phraseText1);
+        mTextStylePhrase.setAbsoluteSizeSpan(25, phraseText1);
 
-        TextStylePhrase.TargetPhraseText phraseText2 = new TextStylePhrase.TargetPhraseText("一去",
-                R.color.colorAccent, 20, Typeface.BOLD);
+        TextStylePhrase.TextSize phraseText2 =  mTextStylePhrase.getTextSize("一去");
+        mTextStylePhrase.setForegroundColorSpan(R.color.colorAccent, phraseText2);
+        mTextStylePhrase.setAbsoluteSizeSpan(20, phraseText2);
+        mTextStylePhrase.setStyleSpan(Typeface.BOLD, phraseText2);
 
-        TextStylePhrase.TargetPhraseText phraseText3 = new TextStylePhrase.TargetPhraseText("不复返",
-                R.color.color0084FB, 14, Typeface.NORMAL);
+        TextStylePhrase.TextSize phraseText3 = mTextStylePhrase.getTextSize("不复返");
+        mTextStylePhrase.setForegroundColorSpan(R.color.color0084FB, phraseText3);
+        mTextStylePhrase.setAbsoluteSizeSpan(14, phraseText3);
+        mTextStylePhrase.setStyleSpan(Typeface.NORMAL, phraseText3);
 
-        TextStylePhrase.TargetPhraseText phraseText4 = new TextStylePhrase.TargetPhraseText("兮",
-                R.color.colorC07703, 12, Typeface.NORMAL);
-
-        mTextStylePhrase.setTargetPhraseTextDatas(phraseText1, phraseText2, phraseText3, phraseText4);
+        TextStylePhrase.TextSize phraseText4 = mTextStylePhrase.getTextSize("兮");
+        mTextStylePhrase.setForegroundColorSpan(R.color.colorC07703, phraseText4);
+        mTextStylePhrase.setAbsoluteSizeSpan(12, phraseText4);
+        mTextStylePhrase.setStyleSpan(Typeface.NORMAL, phraseText4);
 
         // 添加下划线
         mTextStylePhrase.setUnderlineSpan("风萧萧兮易水寒");

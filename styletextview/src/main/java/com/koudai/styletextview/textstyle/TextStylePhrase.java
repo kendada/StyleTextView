@@ -48,29 +48,6 @@ public class TextStylePhrase {
     }
 
     /**
-     * 进行格式化
-     * */
-    public void setTargetPhraseTextDatas(TargetPhraseText... datas){
-        if (datas == null || datas.length == 0) return;
-        if (mSpannableStringBuilder == null) return;
-        for (TargetPhraseText targetPhraseText : datas){
-            String targetText = targetPhraseText.getTargetText();
-            // 设置高亮颜色
-            if (targetPhraseText.getForegroundColorId() != -1){
-                setForegroundColorSpan(targetPhraseText.getForegroundColorId(), targetText);
-            }
-            // 字体大小
-            if (targetPhraseText.getAbsoluteSize() != -1){
-                setAbsoluteSizeSpan(targetPhraseText.getAbsoluteSize(), targetText);
-            }
-            // 字体样式 - 主要用于粗体
-            if (targetPhraseText.getStyle() != -1) {
-                setStyleSpan(targetPhraseText.getStyle(), targetText);
-            }
-        }
-    }
-
-    /**
      * 改变字体颜色
      * @param colorId 高亮颜色
      * @param targetText 目标字符串
@@ -347,59 +324,6 @@ public class TextStylePhrase {
 
         public void setEnd(int end) {
             this.end = end;
-        }
-    }
-
-    public static class TargetPhraseText{
-        private String targetText; // 目标字符串
-        private int foregroundColorId = -1; // 高亮颜色
-        private int absoluteSize = -1; // 字体大小
-        private int style = -1; // 字体样式
-
-        public TargetPhraseText(String targetText){
-            this(targetText, -1, -1, -1);
-        }
-
-        /**
-         * @param style {@link android.graphics.Typeface}
-         * */
-        public TargetPhraseText(String targetText, int foregroundColorId, int absoluteSize, int style){
-            this.targetText = targetText;
-            this.foregroundColorId = foregroundColorId;
-            this.absoluteSize = absoluteSize;
-            this.style = style;
-        }
-
-        public String getTargetText() {
-            return targetText;
-        }
-
-        public void setTargetText(String targetText) {
-            this.targetText = targetText;
-        }
-
-        public int getForegroundColorId() {
-            return foregroundColorId;
-        }
-
-        public void setForegroundColorId(int foregroundColorId) {
-            this.foregroundColorId = foregroundColorId;
-        }
-
-        public int getAbsoluteSize() {
-            return absoluteSize;
-        }
-
-        public void setAbsoluteSize(int absoluteSize) {
-            this.absoluteSize = absoluteSize;
-        }
-
-        public int getStyle() {
-            return style;
-        }
-
-        public void setStyle(int style) {
-            this.style = style;
         }
     }
 
