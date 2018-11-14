@@ -8,6 +8,8 @@
 + WebUrlPovideStyleData 网址高亮，添加点击
 + MentionUserPovideStyleData @某用户
 + TownTalkPovideStyleData 话题，内置样式和微博不同，详见代码，可自行更改
-+ 如果需要自定义样式，可以查看IPovideStyleData，按照里面的规则进行编码，不要实现IPovideStyleData，只需要继承DefaultPovideStyleDataImp就好了。Demo已经实例，可以查看NameProideStyleData
++ 如果需要自定义样式，可以查看IPovideStyleData，按照里面的规则进行编码，不要实现IPovideStyleData，只需要继承DefaultPovideStyleDataImp就好了。Demo已经有实例，具体可以查看NameProideStyleData。
+
+##### 需要在Application中初始化，AppStyleUtils.init(this)，这里主要是用来获取Resources对象，不然无法使用；
 
 ![Alt text](https://github.com/kendada/StyleTextView/blob/master/app/src/main/res/drawable/style_text_view_image.png)
