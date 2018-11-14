@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">StyleTextView</string>
+
+    <string name="ys_take_up_title_txt">收起</string>
+    <string name="ys_open_title_txt">展开</string>
+
+</resources>
