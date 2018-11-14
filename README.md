@@ -5,4 +5,6 @@
 
 2. 支持显示类似微博话题，@某用户，以及自定义规则，详见：[RichTextView](https://github.com/kendada/StyleTextView/blob/master/styletextview/src/main/java/com/koudai/styletextview/RichTextView.java "Title")，不支持展开、收起。[FlexibleRichTextView](https://github.com/kendada/StyleTextView/blob/master/styletextview/src/main/java/com/koudai/styletextview/FlexibleRichTextView.java "Title")，支持展开、收起。      
 
-
++ WebUrlPovideStyleData 网址高亮，添加点击
++ MentionUserPovideStyleData @某用户
++ TownTalkPovideStyleData 话题，内置样式和微博不同，详见代码，可自行更改
