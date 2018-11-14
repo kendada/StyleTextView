@@ -14,7 +14,7 @@
 
 ``   
 Demo代码如下：
-public class MainActivity extends AppCompatActivity {
+
 
 
     private FlexibleRichTextView mFlexibleRichTextView;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         mFlexibleRichTextView.showText();
     }
 
-}
+
 
 ``
 
