@@ -12,13 +12,15 @@ public class NameProideStyleData extends DefaultPovideStyleDataImp {
 
     private String mNickName;
 
+    public NameProideStyleData(){}
+
     public NameProideStyleData(String nickName){
         mNickName = nickName;
     }
 
     @Override
     public int getHighlightColorId() {
-        return R.color.color2F93FF;
+        return R.color.colorRed;
     }
 
     @Override
@@ -51,6 +53,10 @@ public class NameProideStyleData extends DefaultPovideStyleDataImp {
         return mNickName;
     }
 
+    public void setNeedHighlightText(String text){
+        mNickName = text;
+    }
+
     @Override
     public boolean isMatchOne() {
         return true;
@@ -58,7 +64,7 @@ public class NameProideStyleData extends DefaultPovideStyleDataImp {
 
     @Override
     public int getMatchWhichOne() {
-        return 1;
+        return 0;
     }
 
     @Override

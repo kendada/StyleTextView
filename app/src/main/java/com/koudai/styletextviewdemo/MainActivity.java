@@ -2,21 +2,32 @@ package com.koudai.styletextviewdemo;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.koudai.styletextview.BaseRichTextStyle;
 import com.koudai.styletextview.FlexibleRichTextView;
 import com.koudai.styletextview.MentionUserPovideStyleData;
+import com.koudai.styletextview.TextProideStyleData;
 import com.koudai.styletextview.TownTalkPovideStyleData;
 import com.koudai.styletextview.WebUrlPovideStyleData;
+import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String TAG = MainActivity.class.getSimpleName();
 
+    private TextView mSpecialTtTextView;
+    private FlexibleRichTextView mSpecialTextView;
     private FlexibleRichTextView mFlexibleRichTextView;
     private TextView mContentView;
 
@@ -37,11 +48,97 @@ public class MainActivity extends AppCompatActivity {
     private void initView(){
         mContentView = findViewById(R.id.content_view);
         mFlexibleRichTextView = findViewById(R.id.rich_text_view);
+        mSpecialTextView = findViewById(R.id.special_text_view);
+        mSpecialTtTextView = findViewById(R.id.special_tt_text_view);
     }
 
     private void initData() {
-        testStylePhrase();
-        showFlexibleRichTextView();
+//        testStylePhrase();
+//        showFlexibleRichTextView();
+        showSpecialTextView();
+        showSpecialTTTextView();
+    }
+
+    private void showSpecialTTTextView(){
+        final String nickName = "@户_703520～12";
+        String contentText = nickName + ": 4";
+
+        int mFlags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE;
+
+        SpannableStringBuilder mSpannableStringBuilder = new SpannableStringBuilder(contentText);
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorRed));
+        mSpannableStringBuilder.setSpan(colorSpan, 0, nickName.length(), mFlags);
+        mSpannableStringBuilder.setSpan(new NoUnderlineClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                ToastUtils.show("1 - " + nickName);
+            }
+        }, 0, nickName.length(), mFlags);
+
+
+        NoUnderlineClickableSpan[] clickableSpans = mSpannableStringBuilder.getSpans(0, nickName.length(),
+                NoUnderlineClickableSpan.class);
+        for (NoUnderlineClickableSpan clickableSpan : clickableSpans){
+            Log.d(TAG, "clickableSpan = " + clickableSpan);
+        }
+
+        mSpannableStringBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorC07703)),
+                0, nickName.length(), mFlags);
+        mSpannableStringBuilder.setSpan(new NoUnderlineClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                ToastUtils.show("2 - " + nickName);
+            }
+        }, 0, nickName.length(), mFlags);
+
+        mSpannableStringBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorRed)),
+                0, nickName.length(), mFlags);
+        mSpannableStringBuilder.setSpan(new NoUnderlineClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                ToastUtils.show("3 - " + nickName);
+            }
+        }, 0, nickName.length(), mFlags);
+
+
+        mSpecialTtTextView.setText(mSpannableStringBuilder);
+        mSpecialTtTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void showSpecialTextView(){
+        String nickName = "#户_703520~12";
+        String contentText = nickName + " : @小王子#抖音有毒#111112222";
+
+        int status = 1;
+        mSpecialTextView.setText(contentText, true, status);
+
+        TextProideStyleData mTextProideStyleData = new TextProideStyleData();
+        // 自定义
+        mSpecialTextView.addRichTextStyle(mTextProideStyleData);
+
+        // 内置的三个
+        mSpecialTextView.addRichTextStyle(new MentionUserPovideStyleData());
+        mSpecialTextView.addRichTextStyle(new TownTalkPovideStyleData());
+        mSpecialTextView.addRichTextStyle(new WebUrlPovideStyleData());
+
+        mSpecialTextView.addRichTextStyle(mTextProideStyleData);
+
+        mTextProideStyleData.setNeedHighlightText(nickName);
+
+        mSpecialTextView.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
+            @Override
+            public void onClick(int style, String text) {
+                ToastUtils.show(style + " - " + text);
+            }
+        });
+        mSpecialTextView.setOnFlexibleClickListener(new FlexibleRichTextView.OnFlexibleClickListener() {
+            @Override
+            public void onClick(int status) {
+                mStatus = status;
+            }
+        });
+        mSpecialTextView.showText();
+
     }
 
     protected void testStylePhrase() {

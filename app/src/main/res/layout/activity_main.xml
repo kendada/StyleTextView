@@ -5,36 +5,77 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1. TextStylePhrase 用法："
-        android:textStyle="bold"
-        android:textColor="@color/colorRed"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/content_view"
-        android:text="风萧萧兮易水寒，壮士一去兮不复返！"
-        android:textSize="14sp"
-        android:textColor="@color/color333333"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. TextStylePhrase 用法："
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/content_view"
+                android:text="风萧萧兮易水寒，壮士一去兮不复返！"
+                android:textSize="14sp"
+                android:textColor="@color/color333333"
+                />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorRed"
-        android:text="2. FlexibleRichTextView 用法："
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="2. FlexibleRichTextView 用法："
+                />
 
-    <com.koudai.styletextview.FlexibleRichTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rich_text_view"
-        />
+            <com.koudai.styletextview.FlexibleRichTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rich_text_view"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="3. 优化用户昵称中包含@特殊符号："
+                />
+
+            <com.koudai.styletextview.FlexibleRichTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/special_text_view"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="4. 优化用户昵称中包含#特殊符号："
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/special_tt_text_view"
+                />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

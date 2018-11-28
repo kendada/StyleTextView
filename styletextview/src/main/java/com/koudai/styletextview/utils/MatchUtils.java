@@ -16,13 +16,13 @@ public class MatchUtils {
     /**
      * 话题正则表达式
      */
-    public static final String REGEX_TOWNTALK = "#([^#@\\s]+)";
+    public static final String REGEX_TOWNTALK = "#([^\\s]+)";
     public static final Pattern PATTERN_TOWNTALK = Pattern.compile(REGEX_TOWNTALK);
 
     /**
      * 用户@正则表达式
      * */
-    public static final String REGEX_USER_MENTION = "@([^@#\\s]+)";
+    public static final String REGEX_USER_MENTION = "@([^\\s]+)";
     public static final Pattern PATTERN_USER_MENTION = Pattern.compile(REGEX_USER_MENTION);
 
 
