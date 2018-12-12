@@ -81,7 +81,7 @@ public class FlexibleRichTextView extends RichTextView implements BaseRichTextSt
      * */
     private void general(){
         String content = mContentText;
-        mTextStylePhrase = new TextStylePhrase(content);
+        mTextStylePhrase = createTextStylePhrase(content);
         mTextStylePhrase.setForegroundColorSpan(R.color.color999999, mBtnText);
 
         showText();
@@ -120,7 +120,7 @@ public class FlexibleRichTextView extends RichTextView implements BaseRichTextSt
     }
 
     private void setTextStylePhrase(String content){
-        mTextStylePhrase = new TextStylePhrase(content);
+        mTextStylePhrase = createTextStylePhrase(content);
         mTextStylePhrase.setForegroundColorSpan(R.color.color999999, mBtnText);
         mTextStylePhrase.setClickableSpan(mBtnText, new NoUnderlineClickableSpan() {
             @Override

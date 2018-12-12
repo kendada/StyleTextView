@@ -57,6 +57,11 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
         mIPovideStyleDatas.add(iPovideStyleData);
     }
 
+    public void addRichTextStyles(List<IPovideStyleData> list){
+        if (list == null || list.size() == 0) return;
+        mIPovideStyleDatas.addAll(list);
+    }
+
     public void setRichTextStyle(){
         for (IPovideStyleData styleData : mIPovideStyleDatas){
             BaseRichTextStyle baseRichTextStyle = createRichTextStyle(styleData);
@@ -71,6 +76,18 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
     public void setContentText(String contentText){
         mContentText = contentText;
         mTextStylePhrase = new TextStylePhrase(contentText);
+    }
+
+    /**
+     * 生成TextStylePhrase
+     * */
+    public TextStylePhrase createTextStylePhrase(String content){
+        if (mIExternalStylePhraseData != null && mIExternalStylePhraseData.getExternalStylePhrase() != null){
+            if (TextUtils.equals(content, mIExternalStylePhraseData.getExternalStylePhrase().getCourceText())){
+                return mIExternalStylePhraseData.getExternalStylePhrase();
+            }
+        }
+        return new TextStylePhrase(content);
     }
 
     private BaseRichTextStyle createRichTextStyle(IPovideStyleData iPovideStyleData){
@@ -181,5 +198,32 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
         this.mOnTagContentClickListenter = onTagContentClickListenter;
     }
 
+    public IExternalStylePhraseData mIExternalStylePhraseData;
+
+    public IExternalStylePhraseData getIExternalStylePhraseData() {
+        return mIExternalStylePhraseData;
+    }
+
+    public void setExternalStylePhraseData(IExternalStylePhraseData externalStylePhraseData) {
+        this.mIExternalStylePhraseData = externalStylePhraseData;
+    }
+
+    public interface IExternalStylePhraseData {
+        TextStylePhrase getExternalStylePhrase();
+    }
+
+    public static class ExternalStylePhraseDataDefault implements IExternalStylePhraseData{
+
+        private TextStylePhrase mTextStylePhrase;
+
+        public ExternalStylePhraseDataDefault(TextStylePhrase textStylePhrase){
+            mTextStylePhrase = textStylePhrase;
+        }
+
+        @Override
+        public TextStylePhrase getExternalStylePhrase() {
+            return mTextStylePhrase;
+        }
+    }
 
 }

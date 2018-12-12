@@ -194,7 +194,7 @@ public class TextStylePhrase {
     public void setClickableSpan(String targetText, ClickableSpan clickableSpan){
         TextSize textSize = getTextSize(targetText);
         if (textSize == null) return;
-        mSpannableStringBuilder.setSpan(clickableSpan, textSize.start, textSize.end, mFlags);
+        setClickableSpan(textSize.start, textSize.end, clickableSpan);
     }
 
     /**
@@ -203,7 +203,7 @@ public class TextStylePhrase {
      * */
     public void setClickableSpan(TextSize textSize, ClickableSpan clickableSpan){
         if (textSize == null) return;
-        mSpannableStringBuilder.setSpan(clickableSpan, textSize.start, textSize.end, mFlags);
+        setClickableSpan(textSize.start, textSize.end, clickableSpan);
     }
 
     /**
@@ -242,6 +242,21 @@ public class TextStylePhrase {
     public void setImageSpan(TextSize textSize, Drawable drawable){
         if (textSize == null) return;
         setImageSpan(textSize.start, textSize.end, drawable);
+    }
+
+    /**
+     * 移除某一个Span
+     * */
+    public void removeSpan(Object what) {
+        if (what == null || mSpannableStringBuilder == null) return;
+        mSpannableStringBuilder.removeSpan(what);
+    }
+
+    /**
+     * 获取源字符串
+     * */
+    public String getCourceText() {
+        return mCourceText;
     }
 
     /**

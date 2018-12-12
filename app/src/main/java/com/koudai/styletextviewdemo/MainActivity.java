@@ -75,13 +75,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, nickName.length(), mFlags);
 
-
-        NoUnderlineClickableSpan[] clickableSpans = mSpannableStringBuilder.getSpans(0, nickName.length(),
-                NoUnderlineClickableSpan.class);
-        for (NoUnderlineClickableSpan clickableSpan : clickableSpans){
-            Log.d(TAG, "clickableSpan = " + clickableSpan);
-        }
-
         mSpannableStringBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorC07703)),
                 0, nickName.length(), mFlags);
         mSpannableStringBuilder.setSpan(new NoUnderlineClickableSpan() {
@@ -100,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, nickName.length(), mFlags);
 
+        NoUnderlineClickableSpan[] mNoUnderlineClickableSpans =
+                mSpannableStringBuilder.getSpans(0, nickName.length(), NoUnderlineClickableSpan.class);
+        for (NoUnderlineClickableSpan span : mNoUnderlineClickableSpans){
+            AvLog.d("span = " + span);
+        }
+//        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[0]);
+//        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[1]);
+//        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[2]);
 
         mSpecialTtTextView.setText(mSpannableStringBuilder);
         mSpecialTtTextView.setMovementMethod(LinkMovementMethod.getInstance());
