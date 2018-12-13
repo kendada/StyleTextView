@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
+import com.koudai.styletextview.utils.AvLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,8 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
 
     private class DefalutBaseRichTextStyle extends BaseRichTextStyle{
 
+        public IPovideStyleData mIPovideStyleData;
+
         public DefalutBaseRichTextStyle(String content, TextStylePhrase textStylePhrase, IPovideStyleData iPovideStyleData) {
             super(content, textStylePhrase);
             mIPovideStyleData = iPovideStyleData;
@@ -156,7 +159,6 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
                 textSizeList.clear();
                 textSizeList.addAll(list);
             }
-
             setRichStyle(textSizeList);
         }
 
@@ -175,6 +177,11 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
         private void setRichStyle(List<TextStylePhrase.TextSize> textSizeList){
             for (final TextStylePhrase.TextSize textSize : textSizeList){
                 if (textSize == null) continue;
+                AvLog.d_bug("textSize - "
+                        + "textSize.getStart() = " + textSize.getStart()
+                        + " , textSize.getEnd() = " + textSize.getEnd()
+                        + " , textSize.getText() = " + textSize.getText());
+                mTextStylePhrase.replace(textSize);
                 mTextStylePhrase.setForegroundColorSpan(mIPovideStyleData.getHighlightColorId(), textSize);
                 mTextStylePhrase.setStyleSpan(mIPovideStyleData.getTypeface(), textSize);
                 if (mIPovideStyleData.getHighlightTextSize() > 0){

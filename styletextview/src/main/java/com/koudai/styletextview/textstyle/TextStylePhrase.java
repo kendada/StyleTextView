@@ -253,6 +253,64 @@ public class TextStylePhrase {
     }
 
     /**
+     * 替换文本 -- 主要是清除多次设置的Span
+     * */
+    public void replace(TextSize textSize){
+        if (textSize == null || TextUtils.isEmpty(textSize.getText())) return;
+        replace(textSize, textSize.getText());
+    }
+    /**
+     * 替换文本 -- 主要是清除多次设置的Span -- hide
+     * */
+    private void replace(TextSize textSize, CharSequence text){
+        if (textSize == null || text == null) return;
+        replace(textSize.getStart(), textSize.getEnd(), text);
+    }
+    /**
+     * 替换文本 -- 主要是清除多次设置的Span  -- hide
+     * */
+    private void replace(int start, int end, CharSequence text){
+        if (mSpannableStringBuilder == null || text == null) return;
+        mSpannableStringBuilder.replace(start, end, text);
+    }
+
+    /**
+     * 比较相同索引位置的字符串是否相同
+     * */
+    public boolean isEquals(TextSize textSize){
+        if (textSize == null) return false;
+        return isEquals(textSize, textSize.getText());
+    }
+
+    /**
+     * 比较相同索引位置的字符串是否相同 -- hide
+     * */
+    private boolean isEquals(TextSize textSize, CharSequence text){
+        if (textSize == null) return false;
+        return isEquals(textSize.getStart(), textSize.getEnd(), text);
+    }
+
+    /**
+     * 比较相同索引位置的字符串是否相同 -- hide
+     * */
+    private boolean isEquals(int start, int end, CharSequence text){
+        boolean isEquals = false;
+
+        if (start < 0) return isEquals;
+
+        if (TextUtils.isEmpty(mCourceText)) return isEquals;
+
+        int mCourceTextLength = mCourceText.length();
+
+        if (mCourceTextLength > end){
+            String mTargetText = mCourceText.substring(start, end);
+            isEquals = TextUtils.equals(mTargetText, text);
+        }
+        return isEquals;
+    }
+
+
+    /**
      * 获取源字符串
      * */
     public String getCourceText() {
@@ -307,11 +365,13 @@ public class TextStylePhrase {
         private int end;
         private String text;
 
-        public TextSize(int start, int end){
+        private TextSize(){}
+
+        private TextSize(int start, int end){
             this(null, start, end);
         }
 
-        public TextSize(String text, int start, int end){
+        private TextSize(String text, int start, int end){
             this.text = text;
             this.start = start;
             this.end = end;
@@ -329,7 +389,7 @@ public class TextStylePhrase {
             return start;
         }
 
-        public void setStart(int start) {
+        private void setStart(int start) {
             this.start = start;
         }
 
@@ -337,7 +397,7 @@ public class TextStylePhrase {
             return end;
         }
 
-        public void setEnd(int end) {
+        private void setEnd(int end) {
             this.end = end;
         }
     }

@@ -54,7 +54,7 @@
                 android:text="3. 优化用户昵称中包含@特殊符号："
                 />
 
-            <com.koudai.styletextview.FlexibleRichTextView
+            <com.koudai.styletextview.RichTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/special_text_view"

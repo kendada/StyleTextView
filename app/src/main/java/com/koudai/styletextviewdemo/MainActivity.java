@@ -16,18 +16,20 @@ import android.widget.TextView;
 import com.koudai.styletextview.BaseRichTextStyle;
 import com.koudai.styletextview.FlexibleRichTextView;
 import com.koudai.styletextview.MentionUserPovideStyleData;
+import com.koudai.styletextview.RichTextView;
 import com.koudai.styletextview.TextProideStyleData;
 import com.koudai.styletextview.TownTalkPovideStyleData;
 import com.koudai.styletextview.WebUrlPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
+import com.koudai.styletextview.utils.AvLog;
 
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
 
     private TextView mSpecialTtTextView;
-    private FlexibleRichTextView mSpecialTextView;
+    private RichTextView mSpecialTextView;
     private FlexibleRichTextView mFlexibleRichTextView;
     private TextView mContentView;
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 //        testStylePhrase();
 //        showFlexibleRichTextView();
         showSpecialTextView();
-        showSpecialTTTextView();
+//        showSpecialTTTextView();
     }
 
     private void showSpecialTTTextView(){
@@ -107,23 +109,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSpecialTextView(){
-        String nickName = "#户_703520~12";
-        String contentText = nickName + " : @小王子#抖音有毒#111112222";
+        String nickName = "不要关注我@了你";
+        String contentText = nickName + " : @不要关注我@了你 个咯啦咯啦！@米基";
 
-        int status = 1;
-        mSpecialTextView.setText(contentText, true, status);
+        mSpecialTextView.removeAllIPovideStyleData();
+
+
+        mSpecialTextView.addRichTextStyle(new MentionUserPovideStyleData());
 
         TextProideStyleData mTextProideStyleData = new TextProideStyleData();
-        // 自定义
         mSpecialTextView.addRichTextStyle(mTextProideStyleData);
-
-        // 内置的三个
-        mSpecialTextView.addRichTextStyle(new MentionUserPovideStyleData());
-        mSpecialTextView.addRichTextStyle(new TownTalkPovideStyleData());
-        mSpecialTextView.addRichTextStyle(new WebUrlPovideStyleData());
-
-        mSpecialTextView.addRichTextStyle(mTextProideStyleData);
-
         mTextProideStyleData.setNeedHighlightText(nickName);
 
         mSpecialTextView.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
@@ -132,12 +127,9 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtils.show(style + " - " + text);
             }
         });
-        mSpecialTextView.setOnFlexibleClickListener(new FlexibleRichTextView.OnFlexibleClickListener() {
-            @Override
-            public void onClick(int status) {
-                mStatus = status;
-            }
-        });
+
+        mSpecialTextView.setContentText(contentText);
+
         mSpecialTextView.showText();
 
     }

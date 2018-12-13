@@ -13,7 +13,7 @@ public class TownTalkPovideStyleData extends DefaultPovideStyleDataImp{
 
     @Override
     public int getHighlightColorId() {
-        return R.color.color123D68;
+        return R.color.color0084FB;
     }
 
     @Override

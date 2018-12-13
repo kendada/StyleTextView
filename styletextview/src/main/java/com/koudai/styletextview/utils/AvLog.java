@@ -1,6 +1,8 @@
-package com.koudai.styletextviewdemo;
+package com.koudai.styletextview.utils;
 
 import android.util.Log;
+
+import com.koudai.styletextview.BuildConfig;
 
 /**
  * @auther jsk

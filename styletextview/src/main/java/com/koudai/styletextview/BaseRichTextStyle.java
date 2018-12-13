@@ -1,8 +1,10 @@
 package com.koudai.styletextview;
 
 import com.koudai.styletextview.textstyle.TextStylePhrase;
+import com.koudai.styletextview.utils.AvLog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +19,7 @@ public abstract class BaseRichTextStyle {
     public TextStylePhrase mTextStylePhrase;
     public String mContent;
 
-    public IPovideStyleData mIPovideStyleData;
+    public StringBuilder mTextBuilder = new StringBuilder();
 
     public BaseRichTextStyle(String content, TextStylePhrase textStylePhrase){
         mContent = content;
@@ -35,12 +37,17 @@ public abstract class BaseRichTextStyle {
         while (matcher.find()) {
             int matchStart = matcher.start();
             int matchEnd = matcher.end();
+
             String tmptarget = text.substring(matchStart, matchEnd);
             targetList.add(tmptarget);
-            text = text.replace(tmptarget,"");
+
+            mTextBuilder.delete(0, mTextBuilder.length());
+            mTextBuilder.append(text);
+            text = mTextBuilder.delete(matchStart, matchEnd).toString();
+
             matcher = pattern.matcher(text);
         }
-        return targetList;
+        return removeDuplicate(targetList);
     }
 
     public TextStylePhrase getTextStylePhrase() {
@@ -58,6 +65,16 @@ public abstract class BaseRichTextStyle {
 
     public interface OnTagContentClickListenter{
         void onClick(int style, String text);
+    }
+
+    /**
+     * 去重
+     * */
+    public List<String> removeDuplicate(List<String> list) {
+        HashSet<String> h = new HashSet(list);
+        list.clear();
+        list.addAll(h);
+        return list;
     }
 
 }
