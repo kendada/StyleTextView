@@ -403,6 +403,17 @@ public class TextStylePhrase {
     }
 
     /**
+     * 比较两个TextSize是否一样
+     * */
+    public static boolean equals(TextStylePhrase.TextSize a, TextStylePhrase.TextSize b){
+        if (a == null || b == null) return false;
+
+        return a.start == b.start
+                && a.end == b.end
+                && TextUtils.equals(a.text, b.text);
+    }
+
+    /**
      * 居中显示的ImageSpan
      * */
     public static class CenterImageSpan extends ImageSpan{

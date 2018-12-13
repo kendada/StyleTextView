@@ -11,6 +11,7 @@ import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -166,10 +167,15 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
          * 通过正则表达式匹配
          * */
         private void matchByRule(){
+            // 获取需要剔除的字符串TextSize
+            TextStylePhrase.TextSize mExcludeMatchTextSize = getExcludeMatchTextSize(mIPovideStyleData);
+
             List<String> mentionUserList = matchTargetText(mContent, Pattern.compile(mIPovideStyleData.getRuleText()));
 
             for (final String mentionUserText : mentionUserList){
                 List<TextStylePhrase.TextSize> textSizeList = mTextStylePhrase.searchAllTextSize(mentionUserText);
+                // 移除需要剔除的TextSize
+                removeExcludeMatchTextSize(mExcludeMatchTextSize, textSizeList);
                 setRichStyle(textSizeList);
             }
         }
@@ -193,6 +199,44 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
                         RichTextView.this.onClick(getRichTextStyle(), textSize.getText());
                     }
                 });
+            }
+        }
+    }
+
+    /**
+     * 获取需要剔除的字符串TextSize
+     * */
+    private TextStylePhrase.TextSize getExcludeMatchTextSize(IPovideStyleData iPovideStyleData){
+        if (iPovideStyleData == null) return null;
+
+        String mExcludeMatchText = iPovideStyleData.getExcludeMatchText();
+        int mExcludeMatchWhichOne = iPovideStyleData.getExcludeMatchWhichOne();
+
+        TextStylePhrase.TextSize excludeMatchTextSize = null;
+
+        if (!TextUtils.isEmpty(mExcludeMatchText)){
+            List<TextStylePhrase.TextSize> mSearchAllTextSize = mTextStylePhrase.searchAllTextSize(mExcludeMatchText);
+            if (mSearchAllTextSize.size() > mExcludeMatchWhichOne && mExcludeMatchWhichOne >= 0){
+                excludeMatchTextSize = mSearchAllTextSize.get(mExcludeMatchWhichOne);
+            }
+            mSearchAllTextSize.clear();
+        }
+
+        return excludeMatchTextSize;
+    }
+
+    /**
+     * 移除需要剔除的TextSize
+     * */
+    private void removeExcludeMatchTextSize(TextStylePhrase.TextSize needRemoveTextSize,
+                                            List<TextStylePhrase.TextSize> textSizeList){
+        if (needRemoveTextSize == null || textSizeList == null || textSizeList.size() == 0) return;
+
+        Iterator<TextStylePhrase.TextSize> it = textSizeList.iterator();
+        while (it.hasNext()){
+            TextStylePhrase.TextSize textSize = it.next();
+            if (TextStylePhrase.equals(needRemoveTextSize, textSize)){
+                it.remove();
             }
         }
     }

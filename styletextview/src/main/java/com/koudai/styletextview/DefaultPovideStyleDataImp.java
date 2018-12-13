@@ -57,4 +57,26 @@ public abstract class DefaultPovideStyleDataImp implements IPovideStyleData{
     public int getRichTextStyle() {
         return -1;
     }
+
+    @Override
+    public String getExcludeMatchText() {
+        return mExcludeMatchText;
+    }
+
+    private String mExcludeMatchText;
+
+    public void setExcludeMatchText(String text){
+        mExcludeMatchText = text;
+    }
+
+    @Override
+    public int getExcludeMatchWhichOne() {
+        return mExcludeMatchWhichOne;
+    }
+
+    private int mExcludeMatchWhichOne = 0;
+
+    public void setExcludeMatchWhichOne(int whichOne) {
+        this.mExcludeMatchWhichOne = whichOne;
+    }
 }

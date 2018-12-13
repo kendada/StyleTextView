@@ -1,7 +1,6 @@
 package com.koudai.styletextview;
 
 import com.koudai.styletextview.textstyle.TextStylePhrase;
-import com.koudai.styletextview.utils.AvLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;

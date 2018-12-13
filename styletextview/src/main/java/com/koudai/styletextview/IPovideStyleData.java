@@ -26,4 +26,7 @@ public interface IPovideStyleData {
 
     int getRichTextStyle(); // 供前台回调使用，具体区分使用的哪种
 
+    String getExcludeMatchText(); // 在正则表达式的模式下排除某个不需要匹配的字符串
+
+    int getExcludeMatchWhichOne(); // 在正则表达式的模式下排除某个不需要匹配的字符串 -- 索引
 }

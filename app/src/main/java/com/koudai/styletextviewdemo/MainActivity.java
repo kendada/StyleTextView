@@ -9,7 +9,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -109,13 +108,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSpecialTextView(){
-        String nickName = "不要关注我@了你";
-        String contentText = nickName + " : @不要关注我@了你 个咯啦咯啦！@米基";
+        String nickName = "@不要关注我@了你@";
+        String contentText = nickName + " : @不要关注我@了你@ 个咯啦咯啦！@米基 搜索 @不要关注我@了你@ 方法 @不要关注我@了你@";
 
         mSpecialTextView.removeAllIPovideStyleData();
 
 
-        mSpecialTextView.addRichTextStyle(new MentionUserPovideStyleData());
+        MentionUserPovideStyleData mMentionUserPovideStyleData = new MentionUserPovideStyleData();
+
+        mMentionUserPovideStyleData.setExcludeMatchText(nickName);
+        mMentionUserPovideStyleData.setExcludeMatchWhichOne(0);
+
+        mSpecialTextView.addRichTextStyle(mMentionUserPovideStyleData);
 
         TextProideStyleData mTextProideStyleData = new TextProideStyleData();
         mSpecialTextView.addRichTextStyle(mTextProideStyleData);
