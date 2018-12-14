@@ -72,15 +72,13 @@ public class MainActivity extends AppCompatActivity {
         Drawable drawable = getResources().getDrawable(R.drawable.public_icon_v);
         mTextStylePhrase.setImageSpan(imageTextSize, drawable);
 
+        // 生成外部样式
         RichTextView.ExternalStylePhraseDataDefault mExternalStylePhraseDataDefault =
                 new RichTextView.ExternalStylePhraseDataDefault(mTextStylePhrase);
 
+        // 设置外部拓展样式
         mImageTextView.setExternalStylePhraseData(mExternalStylePhraseDataDefault);
 
-        TextProideStyleData mTextProideStyleData = new TextProideStyleData();
-        mTextProideStyleData.setNeedHighlightText("易水歌");
-        mTextProideStyleData.setHighlightColorId(R.color.color2F93FF);
-        mImageTextView.addRichTextStyle(mTextProideStyleData);
 
         mImageTextView.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
             @Override
