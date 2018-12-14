@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import com.koudai.styletextview.BaseRichTextStyle;
 import com.koudai.styletextview.FlexibleRichTextView;
-import com.koudai.styletextview.MentionUserPovideStyleData;
+import com.koudai.styletextview.styledata.imp.MentionUserPovideStyleData;
 import com.koudai.styletextview.RichTextView;
-import com.koudai.styletextview.TextProideStyleData;
-import com.koudai.styletextview.TownTalkPovideStyleData;
-import com.koudai.styletextview.WebUrlPovideStyleData;
+import com.koudai.styletextview.styledata.imp.TextProideStyleData;
+import com.koudai.styletextview.styledata.imp.TownTalkPovideStyleData;
+import com.koudai.styletextview.styledata.imp.WebUrlPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
+import com.koudai.styletextviewdemo.styledata.NameProideStyleData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RichTextView mSpecialTextView;
     private FlexibleRichTextView mFlexibleRichTextView;
     private TextView mContentView;
+    private RichTextView mImageTextView;
 
     private int mStatus = 1; // 默认展开
 
@@ -51,13 +53,44 @@ public class MainActivity extends AppCompatActivity {
         mFlexibleRichTextView = findViewById(R.id.rich_text_view);
         mSpecialTextView = findViewById(R.id.special_text_view);
         mSpecialTtTextView = findViewById(R.id.special_tt_text_view);
+        mImageTextView = findViewById(R.id.image_text_view);
     }
 
     private void initData() {
-//        testStylePhrase();
-//        showFlexibleRichTextView();
+        showImageTextView();
+        testStylePhrase();
+        showFlexibleRichTextView();
         showSpecialTextView();
-//        showSpecialTTTextView();
+        showSpecialTTTextView();
+    }
+
+    private void showImageTextView(){
+        mImageTextView.removeAllIPovideStyleData();
+
+        TextStylePhrase mTextStylePhrase = new TextStylePhrase(sourceText);
+        TextStylePhrase.TextSize imageTextSize = mTextStylePhrase.getTextSize(vTag);
+        Drawable drawable = getResources().getDrawable(R.drawable.public_icon_v);
+        mTextStylePhrase.setImageSpan(imageTextSize, drawable);
+
+        RichTextView.ExternalStylePhraseDataDefault mExternalStylePhraseDataDefault =
+                new RichTextView.ExternalStylePhraseDataDefault(mTextStylePhrase);
+
+        mImageTextView.setExternalStylePhraseData(mExternalStylePhraseDataDefault);
+
+        TextProideStyleData mTextProideStyleData = new TextProideStyleData();
+        mTextProideStyleData.setNeedHighlightText("易水歌");
+        mTextProideStyleData.setHighlightColorId(R.color.color2F93FF);
+        mImageTextView.addRichTextStyle(mTextProideStyleData);
+
+        mImageTextView.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
+            @Override
+            public void onClick(int style, String text) {
+                ToastUtils.show(style + " - " + text);
+            }
+        });
+
+        mImageTextView.setContentText(sourceText);
+        mImageTextView.showText();
     }
 
     private void showSpecialTTTextView(){
@@ -99,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
         for (NoUnderlineClickableSpan span : mNoUnderlineClickableSpans){
             AvLog.d("span = " + span);
         }
-//        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[0]);
-//        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[1]);
+        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[0]);
+        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[1]);
 //        mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[2]);
 
         mSpecialTtTextView.setText(mSpannableStringBuilder);

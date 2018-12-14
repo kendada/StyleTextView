@@ -1,12 +1,15 @@
-package com.koudai.styletextview;
+package com.koudai.styletextview.styledata.imp;
 
 import android.graphics.Typeface;
+
+import com.koudai.styletextview.R;
+import com.koudai.styletextview.styledata.DefaultPovideStyleDataImp;
 
 /**
  * @auther jsk
  * @date 2018/10/29
  */
-public class TextProideStyleData extends DefaultPovideStyleDataImp{
+public class TextProideStyleData extends DefaultPovideStyleDataImp {
 
     public String mText;
 

@@ -1,12 +1,16 @@
-package com.koudai.styletextview;
+package com.koudai.styletextview.styledata.imp;
 
 import android.graphics.Typeface;
+
+import com.koudai.styletextview.R;
+import com.koudai.styletextview.styledata.DefaultPovideStyleDataImp;
+import com.koudai.styletextview.utils.MatchUtils;
 
 /**
  * @auther jsk
  * @date 2018/10/26
  */
-public class WebUrlPovideStyleData extends DefaultPovideStyleDataImp{
+public class MentionUserPovideStyleData extends DefaultPovideStyleDataImp {
 
     @Override
     public int getHighlightColorId() {
@@ -30,7 +34,7 @@ public class WebUrlPovideStyleData extends DefaultPovideStyleDataImp{
 
     @Override
     public String getRuleText() {
-        return "((http|ftp|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
+        return MatchUtils.REGEX_USER_MENTION;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class WebUrlPovideStyleData extends DefaultPovideStyleDataImp{
 
     @Override
     public int getRichTextStyle() {
-        return 1;
+        return 3;
     }
 
 }

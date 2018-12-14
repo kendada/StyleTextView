@@ -1,6 +1,8 @@
-package com.koudai.styletextview;
+package com.koudai.styletextview.styledata;
 
 import android.graphics.Typeface;
+
+import com.koudai.styletextview.R;
 
 /**
  * @auther jsk

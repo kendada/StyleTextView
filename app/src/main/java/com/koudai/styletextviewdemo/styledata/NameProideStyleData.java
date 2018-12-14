@@ -1,8 +1,9 @@
-package com.koudai.styletextviewdemo;
+package com.koudai.styletextviewdemo.styledata;
 
 import android.graphics.Typeface;
 
-import com.koudai.styletextview.DefaultPovideStyleDataImp;
+import com.koudai.styletextview.styledata.DefaultPovideStyleDataImp;
+import com.koudai.styletextviewdemo.R;
 
 /**
  * @auther jsk

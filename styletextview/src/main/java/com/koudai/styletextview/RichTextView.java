@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.koudai.styletextview.styledata.IPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
@@ -77,7 +78,7 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
 
     public void setContentText(String contentText){
         mContentText = contentText;
-        mTextStylePhrase = new TextStylePhrase(contentText);
+        mTextStylePhrase = createTextStylePhrase(contentText);
     }
 
     /**

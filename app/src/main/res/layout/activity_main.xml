@@ -13,6 +13,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,7 +39,6 @@
                 android:textColor="@color/colorRed"
                 android:text="2. FlexibleRichTextView 用法："
                 />
-
             <com.koudai.styletextview.FlexibleRichTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +53,6 @@
                 android:textColor="@color/colorRed"
                 android:text="3. 优化用户昵称中包含@特殊符号："
                 />
-
             <com.koudai.styletextview.RichTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,11 +67,24 @@
                 android:textColor="@color/colorRed"
                 android:text="4. 优化用户昵称中包含#特殊符号："
                 />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/special_tt_text_view"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="5. 支持替换图片显示："
+                />
+            <com.koudai.styletextview.RichTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_text_view"
                 />
 
         </LinearLayout>

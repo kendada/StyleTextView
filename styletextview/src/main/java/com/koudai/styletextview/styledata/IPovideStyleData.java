@@ -1,4 +1,4 @@
-package com.koudai.styletextview;
+package com.koudai.styletextview.styledata;
 
 /**
  * @auther jsk
