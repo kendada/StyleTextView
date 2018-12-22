@@ -3,7 +3,8 @@ package com.koudai.styletextviewdemo;
 import android.app.Application;
 import android.content.Context;
 
-import com.koudai.styletextview.utils.AppStyleUtils;
+import com.koudai.styletextview.utils.StyleTexViewtUtils;
+
 
 /**
  * @auther jsk
@@ -19,7 +20,7 @@ public class MyAPP extends Application {
 
         AppContext = this;
 
-        AppStyleUtils.init(this);
+        StyleTexViewtUtils.init(this);
 
     }
 }

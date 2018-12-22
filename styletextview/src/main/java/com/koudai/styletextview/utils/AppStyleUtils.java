@@ -1,45 +1,21 @@
 package com.koudai.styletextview.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 /**
  * @auther jsk
  * @date 2018/11/14
+ * v2.0.0 版本删除 请使用 {@link StyleTexViewtUtils} 进行初始化
  */
+@Deprecated
 public class AppStyleUtils {
-
-    private static Context mContext;
 
     private AppStyleUtils(){
 
     }
 
     public static void init(Context context){
-        mContext = context;
-    }
-
-    public static Resources getResources(){
-        if (mContext != null){
-            return mContext.getResources();
-        }
-        return null;
-    }
-
-    public static int getColor(int colorId){
-        Resources resources = getResources();
-        if (resources != null){
-            return resources.getColor(colorId);
-        }
-        return -1;
-    }
-
-    public static String getString(int strId){
-        Resources resources = getResources();
-        if (resources != null){
-            return resources.getString(strId);
-        }
-        return "";
+        StyleTexViewtUtils.init(context);
     }
 
 }

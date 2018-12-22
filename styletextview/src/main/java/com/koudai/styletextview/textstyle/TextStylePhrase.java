@@ -18,7 +18,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 
-import com.koudai.styletextview.utils.AppStyleUtils;
+import com.koudai.styletextview.utils.StyleTexViewtUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -482,14 +482,14 @@ public class TextStylePhrase {
      * @param colorId
      * */
     public int getColor(int colorId) {
-        return AppStyleUtils.getColor(colorId);
+        return StyleTexViewtUtils.getColor(colorId);
     }
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
     public int dip2px(float dpValue) {
-        Resources mResources = AppStyleUtils.getResources();
+        Resources mResources = StyleTexViewtUtils.getResources();
         final float scale;
         if (mResources != null){
             scale = mResources.getDisplayMetrics().density;;

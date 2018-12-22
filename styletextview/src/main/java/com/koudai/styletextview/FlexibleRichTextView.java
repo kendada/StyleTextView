@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
-import com.koudai.styletextview.utils.AppStyleUtils;
+import com.koudai.styletextview.utils.StyleTexViewtUtils;
 
 
 /**
@@ -162,9 +162,9 @@ public class FlexibleRichTextView extends RichTextView implements BaseRichTextSt
     private String getStatusText(){
         switch (mStatus){
             case 1:
-                return " " + AppStyleUtils.getString(R.string.ys_take_up_title_txt);
+                return " " + StyleTexViewtUtils.getString(R.string.ys_take_up_title_txt);
             case 2:
-                return " " + AppStyleUtils.getString(R.string.ys_open_title_txt);
+                return " " + StyleTexViewtUtils.getString(R.string.ys_open_title_txt);
         }
         return "";
     }
