@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
@@ -22,8 +23,10 @@ import com.koudai.styletextview.styledata.imp.WebUrlPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
+import com.koudai.styletextview.utils.MatchUtils;
 import com.koudai.styletextviewdemo.styledata.NameProideStyleData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mContentView;
     private RichTextView mImageTextView;
     private TextView mDownViewUp;
+    private TextView mWeiboLinkViewF;
 
     private int mStatus = 1; // 默认展开
 
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mSpecialTtTextView = findViewById(R.id.special_tt_text_view);
         mImageTextView = findViewById(R.id.image_text_view);
         mDownViewUp = (TextView) findViewById(R.id.up_down_view);
+        mWeiboLinkViewF = (TextView) findViewById(R.id.f_weibo_link_view);
     }
 
     private void initData() {
@@ -67,9 +72,103 @@ public class MainActivity extends AppCompatActivity {
         showSpecialTextView();
         showSpecialTTTextView();
         setDownUpView();
+        setWeiboLinkView("点击查看");
     }
 
-    private void setDownUpView(){
+    private void setWeiboLinkView(String linkText){
+        String mReplaceText = "网页链接";
+        if (!TextUtils.isEmpty(linkText)){
+            mReplaceText = linkText;
+        }
+
+        String text = "这个是类似微博替换长网址为网页链接的实现测试，"
+                +
+                "https://www.oschina.net/news/102982/zentao-11-0-released"
+                +
+                "这个是长网址，需要转换为网页链接。"
+                +
+                "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
+                + "再来一个长网址："
+                + "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
+                +"。"
+                ;
+
+        TextStylePhrase mTextStylePhrase = new TextStylePhrase(text);
+        // 原有目标mReplaceText
+        List<TextStylePhrase.TextSize> mReplaceTextSizeOriginalList = mTextStylePhrase.searchAllTextSize(mReplaceText);
+
+        List<String> mURList = MatchUtils.matchTargetText(text, MatchUtils.webUrlPattern);
+        if (mURList == null) return;
+
+        int mURLSize = mURList.size();
+        if (mURLSize == 0) return;
+        AvLog.d_bug("mURLSize = " + mURLSize);
+
+        List<TextStylePhrase.TextSize> mAllTextSizeList = new ArrayList<>();
+        for (String urlStr : mURList){
+            AvLog.d_bug("urlStr = " + urlStr);
+            List<TextStylePhrase.TextSize> mTextSizeList = mTextStylePhrase.searchAllTextSize(urlStr);
+            if (mTextSizeList != null && mTextSizeList.size() > 0){
+                mAllTextSizeList.addAll(mTextSizeList);
+            }
+        }
+
+        if (mAllTextSizeList == null || mAllTextSizeList.size() == 0) return;
+        List<TextStylePhrase.TextSize> mMergeList = new ArrayList<>();
+        mMergeList.addAll(mReplaceTextSizeOriginalList);
+        mMergeList.addAll(mAllTextSizeList);
+
+        // 排序 -- 原有"网页链接"和长网址
+        List<TextStylePhrase.TextSize> mMergeResultList = sortByStart(mMergeList);
+        int mMergeResultSize = mMergeResultList.size();
+        AvLog.d_bug("mMergeResultSize = " + mMergeResultSize);
+
+        // 替换长网址链接为"网页链接"
+        for (TextStylePhrase.TextSize textSize : mAllTextSizeList) {
+            text = text.replace(textSize.getText(), mReplaceText);
+        }
+
+        // ------------------ 完美的分割线 --------------------
+
+        // 已经完成替换
+        TextStylePhrase mDisposeTextStylePhrase = new TextStylePhrase(text);
+        List<TextStylePhrase.TextSize> mDisposeTextSizeList = mDisposeTextStylePhrase.searchAllTextSize(mReplaceText);
+        int mDisposeSize = mDisposeTextSizeList.size();
+        AvLog.d_bug("mDisposeSize = " + mDisposeSize);
+
+        if (mDisposeSize != mMergeResultSize) return;
+
+        for (int i=0; i<mDisposeSize; i++) {
+            TextStylePhrase.TextSize textSize = mDisposeTextSizeList.get(i);
+            final TextStylePhrase.TextSize mMergeResultTextSize = mMergeResultList.get(i);
+            if (!TextUtils.equals(mReplaceText, mMergeResultTextSize.getText())){
+                mDisposeTextStylePhrase.setForegroundColorSpan(R.color.color2F93FF, textSize);
+                mDisposeTextStylePhrase.setClickableSpan(textSize, new NoUnderlineClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View widget) {
+                        ToastUtils.showDebug("测试：" + mMergeResultTextSize.getText());
+                    }
+                });
+            }
+        }
+
+        mWeiboLinkViewF.setText(mDisposeTextStylePhrase.getSpannableStringBuilder());
+        mWeiboLinkViewF.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    /**
+     * 排序 - 从小到大
+     * */
+    private static List<TextStylePhrase.TextSize> sortByStart(List<TextStylePhrase.TextSize> list){
+        try {
+            return TextStylePhrase.sortByStart(list);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private void setDownUpView() {
         String text = "这个是上标上标上标上标上标，那个是下标下标下标下标下标！";
 
         TextStylePhrase mTextStylePhrase = new TextStylePhrase(text);
@@ -82,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             mTextStylePhrase.setForegroundColorSpan(R.color.colorC07703, textSize);
         }
         // 如果想指定哪一个标记为下标，可以使用上面的集合，取其中的一个TextSize进行标记
-        TextStylePhrase.TextSize mSuperscriptTextSize = mSuperscriptTextSizeList.get(mSuperscriptTextSizeList.size()-1);
+        TextStylePhrase.TextSize mSuperscriptTextSize = mSuperscriptTextSizeList.get(mSuperscriptTextSizeList.size() - 1);
         mTextStylePhrase.setBackgroundColorSpan(R.color.color0084FB, mSuperscriptTextSize);
 
         // 标记单个下标

@@ -610,6 +610,25 @@ public class TextStylePhrase {
     }
 
     /**
+     * TextSize排序 - 从小到大
+     * */
+    public static List<TextStylePhrase.TextSize> sortByStart(List<TextStylePhrase.TextSize> list){
+        for (int i=0; i<list.size(); i++){
+            for (int j = i + 1; j < list.size(); j++){
+                TextStylePhrase.TextSize mTextSizeI = list.get(i);
+                TextStylePhrase.TextSize mTextSizeJ = list.get(j);
+                if (mTextSizeI.getStart() > mTextSizeJ.getStart()) {
+                    list.remove(i);
+                    list.add(i, mTextSizeJ);
+                    list.remove(j);
+                    list.add(j, mTextSizeI);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * 居中显示的ImageSpan
      * */
     public static class CenterImageSpan extends ImageSpan{
