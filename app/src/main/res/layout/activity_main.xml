@@ -118,6 +118,21 @@
                 android:id="@+id/f_weibo_link_view"
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="7. 添加抽象类创建TextStylePhrase："
+                />
+            <com.koudai.styletextview.RichTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/agent_style_view"
+                />
+
             <android.support.v4.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />

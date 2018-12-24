@@ -3,6 +3,7 @@ package com.koudai.styletextview;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.koudai.styletextview.styledata.ITextStylePhraseAgent;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.WeiBoUrlLinkTextStyleUtils;
 
@@ -20,6 +21,8 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
     private int mHighlightColorId = -1;
     private Pattern mWebUrlPattern = null;
 
+    private WeiBoUrlLinkTextStylePhraseAgent mWeiBoUrlLinkTextStylePhraseAgent = new WeiBoUrlLinkTextStylePhraseAgent();
+
     public WeiBoUrlLinkRichTextView(Context context) {
         this(context, null, 0);
     }
@@ -30,6 +33,8 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
 
     public WeiBoUrlLinkRichTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        // 设置TextStylePhrase生成器
+        setITextStylePhraseAgent(mWeiBoUrlLinkTextStylePhraseAgent);
     }
 
     public String getLinkText() {
@@ -38,6 +43,9 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
 
     public void setLinkText(String linkText) {
         this.mLinkText = linkText;
+        if (mWeiBoUrlLinkTextStylePhraseAgent != null){
+            mWeiBoUrlLinkTextStylePhraseAgent.setLinkText(linkText);
+        }
     }
 
     public int getHighlightColorId() {
@@ -46,6 +54,9 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
 
     public void setHighlightColorId(int highlightColorId) {
         this.mHighlightColorId = highlightColorId;
+        if (mWeiBoUrlLinkTextStylePhraseAgent != null){
+            mWeiBoUrlLinkTextStylePhraseAgent.setHighlightColorId(highlightColorId);
+        }
     }
 
     public Pattern getWebUrlPattern() {
@@ -54,23 +65,70 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
 
     public void setWebUrlPattern(Pattern webUrlPattern) {
         this.mWebUrlPattern = webUrlPattern;
+        if (mWeiBoUrlLinkTextStylePhraseAgent != null){
+            mWeiBoUrlLinkTextStylePhraseAgent.setWebUrlPattern(webUrlPattern);
+        }
     }
 
-    @Override
-    public TextStylePhrase createTextStylePhrase(String content) {
-        WeiBoUrlLinkTextStyleUtils mWeiBoUrlLinkTextStyleUtils = new WeiBoUrlLinkTextStyleUtils(content);
+    class WeiBoUrlLinkTextStylePhraseAgent implements ITextStylePhraseAgent{
 
-        mWeiBoUrlLinkTextStyleUtils.setLinkText(mLinkText); // 设置替换文案
-        mWeiBoUrlLinkTextStyleUtils.setHighlightColorId(mHighlightColorId); // 设置高亮颜色
-        mWeiBoUrlLinkTextStyleUtils.setWebUrlPattern(mWebUrlPattern); // 设置匹配规则
-        mWeiBoUrlLinkTextStyleUtils.setOnLikeWeiboLinkTextClickListener(mOnLikeWeiboLinkTextClickListener); // 设置点击事件
+        private String mLinkText;
+        private int mHighlightColorId;
+        private Pattern mWebUrlPattern;
+        private WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener mOnLikeWeiboLinkTextClickListener;
 
-        TextStylePhrase textStylePhrase = mWeiBoUrlLinkTextStyleUtils.getLikeWeiboLinkTextStylePhrase();
-        if (textStylePhrase != null){
-            return textStylePhrase;
+        @Override
+        public TextStylePhrase createTextStylePhrase(String content) {
+            WeiBoUrlLinkTextStyleUtils mWeiBoUrlLinkTextStyleUtils = new WeiBoUrlLinkTextStyleUtils(content);
+
+            mWeiBoUrlLinkTextStyleUtils.setLinkText(mLinkText); // 设置替换文案
+            mWeiBoUrlLinkTextStyleUtils.setHighlightColorId(mHighlightColorId); // 设置高亮颜色
+            mWeiBoUrlLinkTextStyleUtils.setWebUrlPattern(mWebUrlPattern); // 设置匹配规则
+            mWeiBoUrlLinkTextStyleUtils.setOnLikeWeiboLinkTextClickListener(mOnLikeWeiboLinkTextClickListener); // 设置点击事件
+
+            TextStylePhrase textStylePhrase = mWeiBoUrlLinkTextStyleUtils.getLikeWeiboLinkTextStylePhrase();
+            if (textStylePhrase != null){
+                return textStylePhrase;
+            }
+            return new TextStylePhrase(content);
         }
-        return new TextStylePhrase(content);
 
+        @Override
+        public void setExternalStylePhraseData(IExternalStylePhraseData iExternalStylePhraseData) {
+
+        }
+
+        public String getLinkText() {
+            return mLinkText;
+        }
+
+        public void setLinkText(String linkText) {
+            this.mLinkText = linkText;
+        }
+
+        public int getHighlightColorId() {
+            return mHighlightColorId;
+        }
+
+        public void setHighlightColorId(int highlightColorId) {
+            this.mHighlightColorId = highlightColorId;
+        }
+
+        public Pattern getWebUrlPattern() {
+            return mWebUrlPattern;
+        }
+
+        public void setWebUrlPattern(Pattern webUrlPattern) {
+            this.mWebUrlPattern = webUrlPattern;
+        }
+
+        public WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener getOnLikeWeiboLinkTextClickListener() {
+            return mOnLikeWeiboLinkTextClickListener;
+        }
+
+        public void setOnLikeWeiboLinkTextClickListener(WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener onLikeWeiboLinkTextClickListener) {
+            this.mOnLikeWeiboLinkTextClickListener = onLikeWeiboLinkTextClickListener;
+        }
     }
 
     private WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener mOnLikeWeiboLinkTextClickListener;
@@ -81,5 +139,9 @@ public class WeiBoUrlLinkRichTextView extends FlexibleRichTextView{
 
     public void setOnLikeWeiboLinkTextClickListener(WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener listener) {
         this.mOnLikeWeiboLinkTextClickListener = listener;
+
+        if (mWeiBoUrlLinkTextStylePhraseAgent != null){
+            mWeiBoUrlLinkTextStylePhraseAgent.setOnLikeWeiboLinkTextClickListener(listener);
+        }
     }
 }

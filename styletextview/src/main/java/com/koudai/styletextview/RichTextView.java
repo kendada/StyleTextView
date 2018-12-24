@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.koudai.styletextview.styledata.DefaultTextStylePhraseAgentImp;
 import com.koudai.styletextview.styledata.IPovideStyleData;
+import com.koudai.styletextview.styledata.ITextStylePhraseAgent;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
@@ -35,6 +37,7 @@ import java.util.regex.Pattern;
 public class RichTextView extends BaseSpannableTextView implements BaseRichTextStyle.OnTagContentClickListenter{
 
     private List<IPovideStyleData> mIPovideStyleDatas = new ArrayList<>();
+    private DefaultTextStylePhraseAgentImp mDefaultTextStylePhraseAgentImp = new DefaultTextStylePhraseAgentImp();
 
     public RichTextView(Context context) {
         this(context, null);
@@ -46,6 +49,8 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
 
     public RichTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        // 设置默认的TextStylePhrase生成器
+        setITextStylePhraseAgent(mDefaultTextStylePhraseAgentImp);
     }
 
     public void removeIPovideStyleData(IPovideStyleData iPovideStyleData){
@@ -74,29 +79,40 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
 
     protected String mContentText; // 内容
     protected TextStylePhrase mTextStylePhrase;
-
+    protected ITextStylePhraseAgent mITextStylePhraseAgent;
 
     public void setContentText(String contentText){
         mContentText = contentText;
         mTextStylePhrase = createTextStylePhrase(contentText);
     }
 
+    public ITextStylePhraseAgent getITextStylePhraseAgent() {
+        return mITextStylePhraseAgent;
+    }
+
+    public void setITextStylePhraseAgent(ITextStylePhraseAgent iTextStylePhraseAgent) {
+        this.mITextStylePhraseAgent = iTextStylePhraseAgent;
+    }
+
     /**
      * 生成TextStylePhrase
      * */
+    @Override
     public TextStylePhrase createTextStylePhrase(String content){
-        if (mIExternalStylePhraseData != null && mIExternalStylePhraseData.getExternalStylePhrase() != null){
-            if (TextUtils.equals(content, mIExternalStylePhraseData.getExternalStylePhrase().getCourceText())){
-                return mIExternalStylePhraseData.getExternalStylePhrase();
+        if (mITextStylePhraseAgent != null){
+            TextStylePhrase textStylePhrase = mITextStylePhraseAgent.createTextStylePhrase(content);
+            if (textStylePhrase != null){
+                return textStylePhrase;
             }
         }
-        return new TextStylePhrase(content);
+        return super.createTextStylePhrase(content);
     }
 
     private BaseRichTextStyle createRichTextStyle(IPovideStyleData iPovideStyleData){
         return new DefalutBaseRichTextStyle(mContentText, mTextStylePhrase, iPovideStyleData);
     }
 
+    @Override
     public void showText(){
         setRichTextStyle();
         setText(mTextStylePhrase.getSpannableStringBuilder());
@@ -250,32 +266,11 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
         this.mOnTagContentClickListenter = onTagContentClickListenter;
     }
 
-    public IExternalStylePhraseData mIExternalStylePhraseData;
-
-    public IExternalStylePhraseData getIExternalStylePhraseData() {
-        return mIExternalStylePhraseData;
-    }
-
+    @Override
     public void setExternalStylePhraseData(IExternalStylePhraseData externalStylePhraseData) {
         this.mIExternalStylePhraseData = externalStylePhraseData;
-    }
-
-    public interface IExternalStylePhraseData {
-        TextStylePhrase getExternalStylePhrase();
-    }
-
-    public static class ExternalStylePhraseDataDefault implements IExternalStylePhraseData{
-
-        private TextStylePhrase mTextStylePhrase;
-
-        public ExternalStylePhraseDataDefault(TextStylePhrase textStylePhrase){
-            mTextStylePhrase = textStylePhrase;
-        }
-
-        @Override
-        public TextStylePhrase getExternalStylePhrase() {
-            return mTextStylePhrase;
+        if (mITextStylePhraseAgent != null){
+            mITextStylePhraseAgent.setExternalStylePhraseData(externalStylePhraseData);
         }
     }
-
 }

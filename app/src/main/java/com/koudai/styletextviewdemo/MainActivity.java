@@ -23,6 +23,7 @@ import com.koudai.styletextview.styledata.imp.WebUrlPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
+import com.koudai.styletextview.utils.MatchUtils;
 import com.koudai.styletextview.utils.WeiBoUrlLinkTextStyleUtils;
 import com.koudai.styletextviewdemo.styledata.NameProideStyleData;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RichTextView mImageTextView;
     private TextView mDownViewUp;
     private WeiBoUrlLinkRichTextView mWeiboLinkViewF;
+    private RichTextView mStyleViewAgent;
 
     private int mStatus = 1; // 默认展开
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mImageTextView = findViewById(R.id.image_text_view);
         mDownViewUp = (TextView) findViewById(R.id.up_down_view);
         mWeiboLinkViewF = (WeiBoUrlLinkRichTextView) findViewById(R.id.f_weibo_link_view);
+        mStyleViewAgent = (RichTextView) findViewById(R.id.agent_style_view);
     }
 
     private void initData() {
@@ -83,6 +86,38 @@ public class MainActivity extends AppCompatActivity {
         showSpecialTTTextView();
         setDownUpView();
         setWeiboLinkView();
+        setStyleViewAgent();
+    }
+
+    private void setStyleViewAgent(){
+        mStyleViewAgent.removeAllIPovideStyleData();
+
+        TextStylePhraseAgentImp textStylePhraseAgentImp = new TextStylePhraseAgentImp();
+        textStylePhraseAgentImp.setLinkText("可以点击");
+        textStylePhraseAgentImp.setHighlightColorId(R.color.colorRed);
+        textStylePhraseAgentImp.setWebUrlPattern(MatchUtils.webUrlPattern);
+        textStylePhraseAgentImp.setOnLikeWeiboLinkTextClickListener(new WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener() {
+            @Override
+            public void onClick(String text, TextStylePhrase.TextSize textSize) {
+                ToastUtils.showDebug("测试：" + text);
+            }
+        });
+
+        mStyleViewAgent.setITextStylePhraseAgent(textStylePhraseAgentImp);
+
+        mStyleViewAgent.addRichTextStyle(new MentionUserPovideStyleData());
+        mStyleViewAgent.addRichTextStyle(new TownTalkPovideStyleData());
+        mStyleViewAgent.addRichTextStyle(new WebUrlPovideStyleData());
+
+        mStyleViewAgent.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
+            @Override
+            public void onClick(int style, String text) {
+                ToastUtils.showDebug("style = " + style + ", text = " + text);
+            }
+        });
+
+        mStyleViewAgent.setContentText(mContentText);
+        mStyleViewAgent.showText();
     }
 
     private void setWeiboLinkView() {

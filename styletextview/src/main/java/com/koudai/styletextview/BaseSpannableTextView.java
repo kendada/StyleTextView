@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
+import com.koudai.styletextview.textstyle.TextStylePhrase;
+
 /**
  * @auther jsk
  * @date 2018/10/16
  */
-public class BaseSpannableTextView extends AppCompatTextView {
+public abstract class BaseSpannableTextView extends AppCompatTextView {
 
     private LinkTouchMovementMethod mLinkTouchMovementMethod;
 
@@ -31,4 +33,37 @@ public class BaseSpannableTextView extends AppCompatTextView {
         }
     }
 
+    public abstract void showText();
+
+    public TextStylePhrase createTextStylePhrase(String content) {
+        return new TextStylePhrase(content);
+    }
+
+    public IExternalStylePhraseData mIExternalStylePhraseData;
+
+    public IExternalStylePhraseData getIExternalStylePhraseData() {
+        return mIExternalStylePhraseData;
+    }
+
+    public void setExternalStylePhraseData(IExternalStylePhraseData iExternalStylePhraseData) {
+        this.mIExternalStylePhraseData = iExternalStylePhraseData;
+    }
+
+    public interface IExternalStylePhraseData {
+        TextStylePhrase getExternalStylePhrase();
+    }
+
+    public static class ExternalStylePhraseDataDefault implements IExternalStylePhraseData{
+
+        private TextStylePhrase mTextStylePhrase;
+
+        public ExternalStylePhraseDataDefault(TextStylePhrase textStylePhrase){
+            mTextStylePhrase = textStylePhrase;
+        }
+
+        @Override
+        public TextStylePhrase getExternalStylePhrase() {
+            return mTextStylePhrase;
+        }
+    }
 }
