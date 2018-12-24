@@ -86,7 +86,20 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/image_text_view"
                 />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"
+                android:text="6. 支持普通文本的上下标："
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/up_down_view"
+                />
         </LinearLayout>
     </ScrollView>
 

@@ -2,7 +2,10 @@ package com.koudai.styletextview.textstyle;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.EmbossMaskFilter;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -11,11 +14,15 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.MaskFilterSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
+import android.text.style.SuperscriptSpan;
+import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
 import com.koudai.styletextview.utils.StyleTexViewtUtils;
@@ -31,6 +38,22 @@ import java.util.List;
  * Spanned.SPAN_EXCLUSIVE_INCLUSIVE 从起始下标到终了下标，包括终了下标
  * @auther jsk
  * @date 2018/8/23
+ *
+ * 以下待整理：
+ * 1. URLSpan 文本超链接 2018-12-24 完成
+ * 2. SuggestionSpan 相当于占位符，一般输入框使用
+ * 3. DynamicDrawableSpan 设置图片，基于文本基线或底部对齐
+ * 4. RelativeSizeSpan 相对大小（文本字体）
+ * 5. ScaleXSpan 基于x轴缩放
+ * 6. TextAppearanceSpan 文本外貌（包括字体、大小、样式和颜色）
+ * 7. TypefaceSpan 文本字体
+ *
+ * 8. RasterizerSpan 光栅效果
+ * 9. TabStopSpan 制表位偏移样式，距离每行的leading margin的偏移量，据测试在首行加入制表符时才产生效果
+ *
+ * 10. MetricAffectingSpan 父类，一般不用
+ * 11. ReplacementSpan 父类，一般不用
+ *
  */
 public class TextStylePhrase {
 
@@ -135,6 +158,179 @@ public class TextStylePhrase {
     public void setStyleSpan(int style, int start, int end){
         StyleSpan mStyleSpan = new StyleSpan(style);
         mSpannableStringBuilder.setSpan(mStyleSpan, start, end, mFlags);
+    }
+
+    /**
+     * 设置上标
+     * @param targetText 注意目标字符的唯一性
+     * */
+    public void setSuperscriptSpan(String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+        setSuperscriptSpan(getTextSize(targetText));
+    }
+
+    /**
+     * 设置上标
+     * */
+    public void setSuperscriptSpan(TextSize textSize){
+        if (textSize == null) return;
+        setSuperscriptSpan(textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置上标
+     * */
+    public void setSuperscriptSpan(int start, int end){
+        SuperscriptSpan superscriptSpan = new SuperscriptSpan();
+        mSpannableStringBuilder.setSpan(superscriptSpan, start, end, mFlags);
+    }
+
+    /**
+     * 设置下标
+     * @param targetText 注意目标字符的唯一性
+     * */
+    public void setSubscriptSpan(String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+        setSubscriptSpan(getTextSize(targetText));
+    }
+
+    /**
+     * 设置下标
+     * */
+    public void setSubscriptSpan(TextSize textSize){
+        if (textSize == null) return;
+        setSubscriptSpan(textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置下标
+     * */
+    public void setSubscriptSpan(int start, int end){
+        SuperscriptSpan superscriptSpan = new SuperscriptSpan();
+        mSpannableStringBuilder.setSpan(superscriptSpan, start, end, mFlags);
+    }
+
+    /**
+     * 设置字体字体背景颜色
+     * */
+    public void setBackgroundColorSpan(int colorId, String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+        setBackgroundColorSpan(colorId, getTextSize(targetText));
+    }
+
+    /**
+     * 设置字体字体背景颜色
+     * */
+    public void setBackgroundColorSpan(int colorId, TextSize textSize){
+        if (textSize == null) return;
+        setBackgroundColorSpan(colorId, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置字体字体背景颜色
+     * */
+    public void setBackgroundColorSpan(int colorId, int start, int end){
+        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getColor(colorId));
+        mSpannableStringBuilder.setSpan(backgroundColorSpan, start, end, mFlags);
+    }
+
+    /**
+     * 设置URLSpan
+     * */
+    public void setURLSpan(String url, String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+        TextSize textSize = getTextSize(targetText);
+
+        setURLSpan(url, textSize);
+    }
+    /**
+     * 设置URLSpan
+     * */
+    public void setURLSpan(String url, TextSize textSize){
+        if (textSize == null) return;
+        setURLSpan(url, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置URLSpan
+     * */
+    public void setURLSpan(String url, int start, int end){
+        if (TextUtils.isEmpty(url)) return;
+        URLSpan urlSpan = new URLSpan(url);
+        mSpannableStringBuilder.setSpan(urlSpan, start, end, mFlags);
+    }
+
+    /**
+     * 设置模糊效果
+     * */
+    public void setBlurMaskFilterSpan(float radius, BlurMaskFilter.Blur style, String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+        TextSize textSize = getTextSize(targetText);
+
+        if (textSize == null) return;
+
+        MaskFilter filter = new BlurMaskFilter(radius, style);
+        setMaskFilterSpan(filter, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置模糊效果
+     * */
+    public void setBlurMaskFilterSpan(float radius, BlurMaskFilter.Blur style, TextSize textSize){
+        if (textSize == null) return;
+        MaskFilter filter = new BlurMaskFilter(radius, style);
+        setMaskFilterSpan(filter, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置模糊效果
+     * @param radius 指定要模糊的范围，必须大于0
+     * @param style Normal 对应物体边界的内部和外部都将进行模糊
+     *              SOLID 图像边界外产生一层与Paint颜色一致阴影效果，不影响图像的本身
+     *              OUTER 图像边界外产生一层阴影，图像内部镂空
+     *              INNER 在图像边界内部产生模糊效果，外部不绘制
+     * */
+    public void setBlurMaskFilterSpan(float radius, BlurMaskFilter.Blur style, int start, int end){
+        MaskFilter filter = new BlurMaskFilter(radius, style);
+        setMaskFilterSpan(filter, start, end);
+    }
+
+    /**
+     * 设置浮雕效果
+     * */
+    public void setEmbossMaskFilterSpan(float[] direction, float ambient, float specular, float blurRadius, String targetText){
+        if (TextUtils.isEmpty(targetText)) return;
+
+        TextSize textSize = getTextSize(targetText);
+        if (textSize == null) return;
+
+        setEmbossMaskFilterSpan(direction, ambient, specular, blurRadius, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置浮雕效果
+     * */
+    public void setEmbossMaskFilterSpan(float[] direction, float ambient, float specular, float blurRadius, TextSize textSize){
+        if (textSize == null) return;
+        setEmbossMaskFilterSpan(direction, ambient, specular, blurRadius, textSize.start, textSize.end);
+    }
+
+    /**
+     * 设置浮雕效果
+     * @param direction 是一个含有三个float元素的数组，对应x、y、z三个方向上的值；用于指定光源方向
+     * @param ambient 环境光的因子 （0~1），0~1表示从暗到亮
+     * @param specular 镜面反射系数，越接近0，反射光越强
+     * @param blurRadius 模糊半径，值越大，模糊效果越明显
+     * */
+    public void setEmbossMaskFilterSpan(float[] direction, float ambient, float specular, float blurRadius, int start, int end){
+        MaskFilter filter = new EmbossMaskFilter(direction, ambient, specular, blurRadius);
+        setMaskFilterSpan(filter, start, end);
+    }
+
+    public void setMaskFilterSpan(MaskFilter maskFilter, int start, int end){
+        if (maskFilter == null) return;
+        MaskFilterSpan maskFilterSpan=new MaskFilterSpan(maskFilter);
+        mSpannableStringBuilder.setSpan(maskFilterSpan, start, end, mFlags);
     }
 
     /**

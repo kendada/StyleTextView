@@ -2,9 +2,9 @@ package com.koudai.styletextviewdemo;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.koudai.styletextview.BaseRichTextStyle;
 import com.koudai.styletextview.FlexibleRichTextView;
-import com.koudai.styletextview.styledata.imp.MentionUserPovideStyleData;
 import com.koudai.styletextview.RichTextView;
+import com.koudai.styletextview.styledata.imp.MentionUserPovideStyleData;
 import com.koudai.styletextview.styledata.imp.TextProideStyleData;
 import com.koudai.styletextview.styledata.imp.TownTalkPovideStyleData;
 import com.koudai.styletextview.styledata.imp.WebUrlPovideStyleData;
@@ -23,6 +23,8 @@ import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
 import com.koudai.styletextviewdemo.styledata.NameProideStyleData;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FlexibleRichTextView mFlexibleRichTextView;
     private TextView mContentView;
     private RichTextView mImageTextView;
+    private TextView mDownViewUp;
 
     private int mStatus = 1; // 默认展开
 
@@ -48,12 +51,13 @@ public class MainActivity extends AppCompatActivity {
         initData();
     }
 
-    private void initView(){
+    private void initView() {
         mContentView = findViewById(R.id.content_view);
         mFlexibleRichTextView = findViewById(R.id.rich_text_view);
         mSpecialTextView = findViewById(R.id.special_text_view);
         mSpecialTtTextView = findViewById(R.id.special_tt_text_view);
         mImageTextView = findViewById(R.id.image_text_view);
+        mDownViewUp = (TextView) findViewById(R.id.up_down_view);
     }
 
     private void initData() {
@@ -62,9 +66,36 @@ public class MainActivity extends AppCompatActivity {
         showFlexibleRichTextView();
         showSpecialTextView();
         showSpecialTTTextView();
+        setDownUpView();
     }
 
-    private void showImageTextView(){
+    private void setDownUpView(){
+        String text = "这个是上标上标上标上标上标，那个是下标下标下标下标下标！";
+
+        TextStylePhrase mTextStylePhrase = new TextStylePhrase(text);
+
+        // 支持多个相同的字符标记上标
+        List<TextStylePhrase.TextSize> mSuperscriptTextSizeList = mTextStylePhrase.searchAllTextSize("上标");
+        for (TextStylePhrase.TextSize textSize : mSuperscriptTextSizeList) {
+            mTextStylePhrase.setSuperscriptSpan(textSize);
+            mTextStylePhrase.setAbsoluteSizeSpan(8, textSize);
+            mTextStylePhrase.setForegroundColorSpan(R.color.colorC07703, textSize);
+        }
+        // 如果想指定哪一个标记为下标，可以使用上面的集合，取其中的一个TextSize进行标记
+        TextStylePhrase.TextSize mSuperscriptTextSize = mSuperscriptTextSizeList.get(mSuperscriptTextSizeList.size()-1);
+        mTextStylePhrase.setBackgroundColorSpan(R.color.color0084FB, mSuperscriptTextSize);
+
+        // 标记单个下标
+        TextStylePhrase.TextSize mSubscriptTextSize = mTextStylePhrase.getTextSize("下标");
+        mTextStylePhrase.setSubscriptSpan(mSubscriptTextSize);
+        mTextStylePhrase.setAbsoluteSizeSpan(8, mSubscriptTextSize);
+        mTextStylePhrase.setForegroundColorSpan(R.color.colorRed, mSubscriptTextSize);
+        mTextStylePhrase.setBackgroundColorSpan(R.color.color0084FB, mSubscriptTextSize);
+
+        mDownViewUp.setText(mTextStylePhrase.getSpannableStringBuilder());
+    }
+
+    private void showImageTextView() {
         mImageTextView.removeAllIPovideStyleData();
 
         TextStylePhrase mTextStylePhrase = new TextStylePhrase(sourceText);
@@ -91,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         mImageTextView.showText();
     }
 
-    private void showSpecialTTTextView(){
+    private void showSpecialTTTextView() {
         final String nickName = "@户_703520～12";
         String contentText = nickName + ": 4";
 
@@ -127,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         NoUnderlineClickableSpan[] mNoUnderlineClickableSpans =
                 mSpannableStringBuilder.getSpans(0, nickName.length(), NoUnderlineClickableSpan.class);
-        for (NoUnderlineClickableSpan span : mNoUnderlineClickableSpans){
+        for (NoUnderlineClickableSpan span : mNoUnderlineClickableSpans) {
             AvLog.d("span = " + span);
         }
         mSpannableStringBuilder.removeSpan(mNoUnderlineClickableSpans[0]);
@@ -138,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         mSpecialTtTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void showSpecialTextView(){
+    private void showSpecialTextView() {
         String nickName = "@不要关注我@了你@";
         String contentText = nickName + " : @不要关注我@了你@ 个咯啦咯啦！@米基 搜索 @不要关注我@了你@ 方法 @不要关注我@了你@";
 
@@ -172,11 +203,11 @@ public class MainActivity extends AppCompatActivity {
     protected void testStylePhrase() {
         TextStylePhrase mTextStylePhrase = new TextStylePhrase(sourceText);
 
-        TextStylePhrase.TextSize phraseText1 =  mTextStylePhrase.getTextSize("水寒");
+        TextStylePhrase.TextSize phraseText1 = mTextStylePhrase.getTextSize("水寒");
         mTextStylePhrase.setForegroundColorSpan(R.color.colorPrimaryDark, phraseText1);
         mTextStylePhrase.setAbsoluteSizeSpan(25, phraseText1);
 
-        TextStylePhrase.TextSize phraseText2 =  mTextStylePhrase.getTextSize("一去");
+        TextStylePhrase.TextSize phraseText2 = mTextStylePhrase.getTextSize("一去");
         mTextStylePhrase.setForegroundColorSpan(R.color.colorAccent, phraseText2);
         mTextStylePhrase.setAbsoluteSizeSpan(20, phraseText2);
         mTextStylePhrase.setStyleSpan(Typeface.BOLD, phraseText2);
@@ -208,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         mContentView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void showFlexibleRichTextView(){
+    private void showFlexibleRichTextView() {
         String content = "南靖#土楼 以建筑奇特，南靖#土楼 @小米之家 居多而闻名天下。"
                 + "福建对于我来说知道最多的可能就是关于#土楼 的传说。"
                 + "这么小的孩子不上学在这里做起了生意，竟然没有人管。@人民日报 @南方报业 景区门口乱糟糟的，给人感觉一点都不规范。"
