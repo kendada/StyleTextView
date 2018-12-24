@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.koudai.styletextview.BaseRichTextStyle;
 import com.koudai.styletextview.FlexibleRichTextView;
 import com.koudai.styletextview.RichTextView;
+import com.koudai.styletextview.WeiBoUrlLinkRichTextView;
 import com.koudai.styletextview.styledata.imp.MentionUserPovideStyleData;
 import com.koudai.styletextview.styledata.imp.TextProideStyleData;
 import com.koudai.styletextview.styledata.imp.TownTalkPovideStyleData;
@@ -23,10 +23,9 @@ import com.koudai.styletextview.styledata.imp.WebUrlPovideStyleData;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
-import com.koudai.styletextview.utils.MatchUtils;
+import com.koudai.styletextview.utils.WeiBoUrlLinkTextStyleUtils;
 import com.koudai.styletextviewdemo.styledata.NameProideStyleData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,12 +38,23 @@ public class MainActivity extends AppCompatActivity {
     private TextView mContentView;
     private RichTextView mImageTextView;
     private TextView mDownViewUp;
-    private TextView mWeiboLinkViewF;
+    private WeiBoUrlLinkRichTextView mWeiboLinkViewF;
 
     private int mStatus = 1; // 默认展开
 
     private String sourceText = "《易水歌》风萧萧兮易水寒，#V#壮士一去兮不复返";
     private String vTag = "#V#";
+    private String mContentText = "这个是类似微博替换长网址为网页链接的实现测试，"
+            + "https://www.oschina.net/news/102982/zentao-11-0-released"
+            + "这个是长网址，需要转换为网页链接。"
+            + "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
+            + "再来一个长网址："
+            + "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
+            + "。"
+            + "#第一印象 "
+            + "@人民日报 @南方日报 。"
+            + "置TextView显示样式，支持富文本展示：更改部分字体颜色，添加图标，显示下划线等；"
+            + "并且支持显示类似微博话题，@某用户 ，以及字体过多时显示收起和展开操作等。";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mSpecialTtTextView = findViewById(R.id.special_tt_text_view);
         mImageTextView = findViewById(R.id.image_text_view);
         mDownViewUp = (TextView) findViewById(R.id.up_down_view);
-        mWeiboLinkViewF = (TextView) findViewById(R.id.f_weibo_link_view);
+        mWeiboLinkViewF = (WeiBoUrlLinkRichTextView) findViewById(R.id.f_weibo_link_view);
     }
 
     private void initData() {
@@ -72,100 +82,41 @@ public class MainActivity extends AppCompatActivity {
         showSpecialTextView();
         showSpecialTTTextView();
         setDownUpView();
-        setWeiboLinkView("点击查看");
+        setWeiboLinkView();
     }
 
-    private void setWeiboLinkView(String linkText){
-        String mReplaceText = "网页链接";
-        if (!TextUtils.isEmpty(linkText)){
-            mReplaceText = linkText;
-        }
-
-        String text = "这个是类似微博替换长网址为网页链接的实现测试，"
-                +
-                "https://www.oschina.net/news/102982/zentao-11-0-released"
-                +
-                "这个是长网址，需要转换为网页链接。"
-                +
-                "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
-                + "再来一个长网址："
-                + "https://www.juzimi.com/ju/924652?juzipic=jezomr4"
-                +"。"
-                ;
-
-        TextStylePhrase mTextStylePhrase = new TextStylePhrase(text);
-        // 原有目标mReplaceText
-        List<TextStylePhrase.TextSize> mReplaceTextSizeOriginalList = mTextStylePhrase.searchAllTextSize(mReplaceText);
-
-        List<String> mURList = MatchUtils.matchTargetText(text, MatchUtils.webUrlPattern);
-        if (mURList == null) return;
-
-        int mURLSize = mURList.size();
-        if (mURLSize == 0) return;
-        AvLog.d_bug("mURLSize = " + mURLSize);
-
-        List<TextStylePhrase.TextSize> mAllTextSizeList = new ArrayList<>();
-        for (String urlStr : mURList){
-            AvLog.d_bug("urlStr = " + urlStr);
-            List<TextStylePhrase.TextSize> mTextSizeList = mTextStylePhrase.searchAllTextSize(urlStr);
-            if (mTextSizeList != null && mTextSizeList.size() > 0){
-                mAllTextSizeList.addAll(mTextSizeList);
+    private void setWeiboLinkView() {
+        mWeiboLinkViewF.setLinkText("点击查看");
+        mWeiboLinkViewF.setOnLikeWeiboLinkTextClickListener(new WeiBoUrlLinkTextStyleUtils.OnLikeWeiboLinkTextClickListener() {
+            @Override
+            public void onClick(String text, TextStylePhrase.TextSize textSize) {
+                ToastUtils.showDebug("测试：" + text);
             }
-        }
+        });
 
-        if (mAllTextSizeList == null || mAllTextSizeList.size() == 0) return;
-        List<TextStylePhrase.TextSize> mMergeList = new ArrayList<>();
-        mMergeList.addAll(mReplaceTextSizeOriginalList);
-        mMergeList.addAll(mAllTextSizeList);
-
-        // 排序 -- 原有"网页链接"和长网址
-        List<TextStylePhrase.TextSize> mMergeResultList = sortByStart(mMergeList);
-        int mMergeResultSize = mMergeResultList.size();
-        AvLog.d_bug("mMergeResultSize = " + mMergeResultSize);
-
-        // 替换长网址链接为"网页链接"
-        for (TextStylePhrase.TextSize textSize : mAllTextSizeList) {
-            text = text.replace(textSize.getText(), mReplaceText);
-        }
-
-        // ------------------ 完美的分割线 --------------------
-
-        // 已经完成替换
-        TextStylePhrase mDisposeTextStylePhrase = new TextStylePhrase(text);
-        List<TextStylePhrase.TextSize> mDisposeTextSizeList = mDisposeTextStylePhrase.searchAllTextSize(mReplaceText);
-        int mDisposeSize = mDisposeTextSizeList.size();
-        AvLog.d_bug("mDisposeSize = " + mDisposeSize);
-
-        if (mDisposeSize != mMergeResultSize) return;
-
-        for (int i=0; i<mDisposeSize; i++) {
-            TextStylePhrase.TextSize textSize = mDisposeTextSizeList.get(i);
-            final TextStylePhrase.TextSize mMergeResultTextSize = mMergeResultList.get(i);
-            if (!TextUtils.equals(mReplaceText, mMergeResultTextSize.getText())){
-                mDisposeTextStylePhrase.setForegroundColorSpan(R.color.color2F93FF, textSize);
-                mDisposeTextStylePhrase.setClickableSpan(textSize, new NoUnderlineClickableSpan() {
-                    @Override
-                    public void onClick(@NonNull View widget) {
-                        ToastUtils.showDebug("测试：" + mMergeResultTextSize.getText());
-                    }
-                });
+        mWeiboLinkViewF.setOnTagContentClickListenter(new BaseRichTextStyle.OnTagContentClickListenter() {
+            @Override
+            public void onClick(int style, String text) {
+                ToastUtils.showDebug("style = " + style + ", text = " + text);
             }
-        }
+        });
 
-        mWeiboLinkViewF.setText(mDisposeTextStylePhrase.getSpannableStringBuilder());
-        mWeiboLinkViewF.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+        mWeiboLinkViewF.setOnFlexibleClickListener(new FlexibleRichTextView.OnFlexibleClickListener() {
+            @Override
+            public void onClick(int status) {
+                ToastUtils.showDebug("折叠状态：" + status);
+            }
+        });
 
-    /**
-     * 排序 - 从小到大
-     * */
-    private static List<TextStylePhrase.TextSize> sortByStart(List<TextStylePhrase.TextSize> list){
-        try {
-            return TextStylePhrase.sortByStart(list);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
+        mWeiboLinkViewF.removeAllIPovideStyleData();
+
+        mWeiboLinkViewF.addRichTextStyle(new MentionUserPovideStyleData());
+        mWeiboLinkViewF.addRichTextStyle(new TownTalkPovideStyleData());
+        mWeiboLinkViewF.addRichTextStyle(new WebUrlPovideStyleData());
+
+        mWeiboLinkViewF.setText(mContentText, true, 2);
+        mWeiboLinkViewF.showText();
+
     }
 
     private void setDownUpView() {
