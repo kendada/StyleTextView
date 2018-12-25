@@ -3,7 +3,7 @@
 在 app 目录的 'build.gradle' 添加：  
 dependencies {     
     ......     
-    compile 'com.koudai.styletextview:styletextview:1.1.2'    
+    compile 'com.koudai.styletextview:styletextview:1.2.0'    
 }
 
 1. 封装SpannableStringBuilder支持富文本显示，简化系统API使用，详见：[TextStylePhrase](https://github.com/kendada/StyleTextView/blob/master/styletextview/src/main/java/com/koudai/styletextview/textstyle/TextStylePhrase.java "Title")。      
