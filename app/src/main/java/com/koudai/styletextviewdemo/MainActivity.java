@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(String text, TextStylePhrase.TextSize textSize) {
                 ToastUtils.showDebug("测试：" + text);
+                RichTextTestActivity.start(MainActivity.this);
             }
         });
 
