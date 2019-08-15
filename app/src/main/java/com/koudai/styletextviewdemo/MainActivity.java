@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDownViewUp;
     private WeiBoUrlLinkRichTextView mWeiboLinkViewF;
     private RichTextView mStyleViewAgent;
+    private TextView createExternalTextView;
 
     private int mStatus = 1; // 默认展开
 
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mWeiboLinkViewF = (WeiBoUrlLinkRichTextView) findViewById(R.id.f_weibo_link_view);
         mStyleViewAgent = (RichTextView) findViewById(R.id.agent_style_view);
         mRichTextViewEllipsize = (EllipsizeRichTextView) findViewById(R.id.ellipsize_rich_text_view);
+        createExternalTextView = (TextView) findViewById(R.id.create_external_text_view);
     }
 
     private void initData() {
@@ -94,6 +96,24 @@ public class MainActivity extends AppCompatActivity {
         setWeiboLinkView();
         setStyleViewAgent();
         setEllipsizeTextViewData();
+        createExternalTextSize();
+    }
+
+    /**
+     * 在外部创建TextSize，一定要验证是否合法，才能做其他操作
+     * */
+    private void createExternalTextSize(){
+        TextStylePhrase textStylePhrase = new TextStylePhrase(mTestText);
+
+        // 返回值可能为null
+        TextStylePhrase.TextSize textSize = TextStylePhrase.Builder.obtain("既然这么在意", 0, 6, null).getTextSize();
+
+        boolean contains = textStylePhrase.contains(textSize);
+        AvLog.d("contains = " + contains);
+        if (contains){
+            textStylePhrase.setForegroundColorSpan(R.color.color0084FB, textSize);
+        }
+        createExternalTextView.setText(textStylePhrase.getSpannableStringBuilder());
     }
 
     private void setEllipsizeTextViewData(){

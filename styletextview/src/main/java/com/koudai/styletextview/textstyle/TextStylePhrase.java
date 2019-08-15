@@ -471,6 +471,23 @@ public class TextStylePhrase {
     }
 
     /**
+     * 是否包含外部创建的文本
+     * */
+    public boolean contains(TextSize textSize){
+        if (textSize == null) return false;
+
+        if (TextUtils.isEmpty(mCourceText)) return false;
+
+        boolean indexBool = textSize.start >= 0 && textSize.end <= mCourceText.length();
+
+        if (TextUtils.isEmpty(textSize.text)){
+            return indexBool;
+        }
+
+        return mCourceText.contains(textSize.text) && indexBool;
+    }
+
+    /**
      * 比较相同索引位置的字符串是否相同
      * */
     public boolean isEquals(TextSize textSize){
@@ -553,6 +570,42 @@ public class TextStylePhrase {
         return list;
     }
 
+    public final static class Builder {
+
+        String source = null;
+        int start = -1;
+        int end = -1;
+        Object tag = null;
+
+        private Builder(){}
+
+        public static Builder obtain(int start, int end){
+            return obtain(null, start, end, null);
+        }
+
+        public static Builder obtain(String source, int start, int end){
+            return obtain(source, start, end, null);
+        }
+
+        public static Builder obtain(String source, int start, int end, Object tag){
+            Builder mBuilder = new Builder();
+
+            mBuilder.source = source;
+            mBuilder.start = start;
+            mBuilder.end = end;
+            mBuilder.tag = tag;
+
+            return mBuilder;
+        }
+
+        public TextSize getTextSize(){
+            if (start == -1 || end == -1){
+                return null;
+            }
+            return new TextSize(source, start, end, tag);
+        }
+    }
+
     /**
      * 包含目标字符串在源字符串中的索引 开始 & 结束
      * */
@@ -560,17 +613,23 @@ public class TextStylePhrase {
         private int start;
         private int end;
         private String text;
+        private Object tag; // 作为一种数据扩展
 
         private TextSize(){}
 
         private TextSize(int start, int end){
-            this(null, start, end);
+            this(null, start, end, null);
         }
 
         private TextSize(String text, int start, int end){
+            this(text, start, end, null);
+        }
+
+        private TextSize(String text, int start, int end, Object tag){
             this.text = text;
             this.start = start;
             this.end = end;
+            this.tag = tag;
         }
 
         public String getText() {
@@ -595,6 +654,14 @@ public class TextStylePhrase {
 
         private void setEnd(int end) {
             this.end = end;
+        }
+
+        public Object getTag() {
+            return tag;
+        }
+
+        public void setTag(Object tag) {
+            this.tag = tag;
         }
     }
 
