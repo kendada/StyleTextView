@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.koudai.styletextview.BaseRichTextStyle;
+import com.koudai.styletextview.BaseSpannableTextView;
+import com.koudai.styletextview.EllipsizeRichTextView;
 import com.koudai.styletextview.FlexibleRichTextView;
 import com.koudai.styletextview.RichTextView;
 import com.koudai.styletextview.WeiBoUrlLinkRichTextView;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int mStatus = 1; // 默认展开
 
+    private String mTestText = "既然这么在意，不如干脆打电话告诉她“我喜欢你”，请她和我交往。不，如果我真的爱她，一定会这么做。正因为并不是真的爱她，才会陷入这样的感伤。 我之所以对她念念不忘，是因为我们已经决定不再见面。空白编制出故事，故事孕育了感伤";
+
     private String sourceText = "《易水歌》风萧萧兮易水寒，#V#壮士一去兮不复返";
     private String vTag = "#V#";
     private String mContentText = "这个是类似微博替换长网址为网页链接的实现测试，"
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             + "@人民日报 @南方日报 。"
             + "置TextView显示样式，支持富文本展示：更改部分字体颜色，添加图标，显示下划线等；"
             + "并且支持显示类似微博话题，@某用户 ，以及字体过多时显示收起和展开操作等。";
+    private EllipsizeRichTextView mRichTextViewEllipsize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         mDownViewUp = (TextView) findViewById(R.id.up_down_view);
         mWeiboLinkViewF = (WeiBoUrlLinkRichTextView) findViewById(R.id.f_weibo_link_view);
         mStyleViewAgent = (RichTextView) findViewById(R.id.agent_style_view);
+        mRichTextViewEllipsize = (EllipsizeRichTextView) findViewById(R.id.ellipsize_rich_text_view);
     }
 
     private void initData() {
@@ -87,9 +93,15 @@ public class MainActivity extends AppCompatActivity {
         setDownUpView();
         setWeiboLinkView();
         setStyleViewAgent();
+        setEllipsizeTextViewData();
     }
 
-    private void setStyleViewAgent(){
+    private void setEllipsizeTextViewData(){
+        mRichTextViewEllipsize.setContentText(mTestText);
+        mRichTextViewEllipsize.showText();
+    }
+
+    private void setStyleViewAgent() {
         mStyleViewAgent.removeAllIPovideStyleData();
 
         TextStylePhraseAgentImp textStylePhraseAgentImp = new TextStylePhraseAgentImp();

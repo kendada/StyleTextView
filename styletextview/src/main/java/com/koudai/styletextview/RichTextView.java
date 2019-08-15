@@ -81,6 +81,10 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
     protected TextStylePhrase mTextStylePhrase;
     protected ITextStylePhraseAgent mITextStylePhraseAgent;
 
+    public void setContentText(CharSequence contentText){
+        setContentText(contentText.toString());
+    }
+
     public void setContentText(String contentText){
         mContentText = contentText;
         mTextStylePhrase = createTextStylePhrase(contentText);
