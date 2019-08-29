@@ -598,6 +598,38 @@ public class TextStylePhrase {
             return mBuilder;
         }
 
+        public String getSource() {
+            return source;
+        }
+
+        public void setSource(String source) {
+            this.source = source;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        public Object getTag() {
+            return tag;
+        }
+
+        public void setTag(Object tag) {
+            this.tag = tag;
+        }
+
         public TextSize getTextSize(){
             if (start == -1 || end == -1){
                 return null;
