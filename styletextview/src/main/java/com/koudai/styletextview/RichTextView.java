@@ -10,6 +10,7 @@ import com.koudai.styletextview.styledata.DefaultTextStylePhraseAgentImp;
 import com.koudai.styletextview.styledata.IPovideStyleData;
 import com.koudai.styletextview.styledata.ITextStylePhraseAgent;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
+import com.koudai.styletextview.textstyle.TextSizeUtils;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 import com.koudai.styletextview.utils.AvLog;
 
@@ -256,7 +257,7 @@ public class RichTextView extends BaseSpannableTextView implements BaseRichTextS
         Iterator<TextStylePhrase.TextSize> it = textSizeList.iterator();
         while (it.hasNext()){
             TextStylePhrase.TextSize textSize = it.next();
-            if (TextStylePhrase.equals(needRemoveTextSize, textSize)){
+            if (TextSizeUtils.equals(needRemoveTextSize, textSize)){
                 it.remove();
             }
         }

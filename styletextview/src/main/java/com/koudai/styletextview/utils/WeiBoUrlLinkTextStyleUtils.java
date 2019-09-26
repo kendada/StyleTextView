@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.koudai.styletextview.R;
 import com.koudai.styletextview.textstyle.NoUnderlineClickableSpan;
+import com.koudai.styletextview.textstyle.TextSizeUtils;
 import com.koudai.styletextview.textstyle.TextStylePhrase;
 
 import java.util.ArrayList;
@@ -154,7 +155,7 @@ public class WeiBoUrlLinkTextStyleUtils {
      * */
     private List<TextStylePhrase.TextSize> sortByStart(List<TextStylePhrase.TextSize> list){
         try {
-            return TextStylePhrase.sortByStart(list);
+            return TextSizeUtils.sortByStart(list);
         } catch (Exception e){
             e.printStackTrace();
         }
